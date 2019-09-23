@@ -1,0 +1,11 @@
+## Interface: 11302
+## Version: 0.1
+## Author: datagutten
+## Title: ProfessionMailer
+## Notes: Send materials to the character who needs them
+## SavedVariables: CharacterNeeds
+
+libs\LibStub\LibStub.lua
+LibInventory.lua
+ProfessionMailer.lua
+ProfessionMailer.xml
