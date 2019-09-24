@@ -1,3 +1,11 @@
+externals:
+  libs/LibStub:
+    url: https://repos.wowace.com/wow/libstub/trunk
+    tag: latest
+  libs/LibProfession:
+    url: https://github.com/datagutten/wow-LibProfessions.git
+    tag: latest
+
 required-dependencies:
   - LibProfessions
   - LibStub
