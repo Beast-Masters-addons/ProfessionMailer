@@ -6,6 +6,7 @@
 ## SavedVariables: CharacterNeeds
 
 libs\LibStub\LibStub.lua
+utils.lua
 LibInventory.lua
 ProfessionMailer.lua
 ProfessionMailer.xml

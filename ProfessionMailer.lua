@@ -4,11 +4,12 @@ local profession = professions
 --local inventory = LibStub("LibInventory-1.0")
 local inventory = addon
 local owned_items
+local utils = addon
 
 local frame = CreateFrame("FRAME"); -- Need a frame to respond to events
 frame:RegisterEvent("ADDON_LOADED"); -- Fired when saved variables are loaded
 
-local character_name = UnitName("player") .. '-' .. GetRealmName()
+local character_name = utils:get_char_string()
 
 local function init_variables()
     --CharacterProfessions = {}
