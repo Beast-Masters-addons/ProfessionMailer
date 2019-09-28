@@ -37,9 +37,13 @@ function addon:SaveReagents()
         print(recipe['name'])
         local reagents = profession:GetReagents(recipeID)
         for _, reagent in pairs(reagents) do
-            local reagentItemID = reagent[1]
-            local reagentName = reagent[2]
-            print('Index: ', reagentItemID, reagentName)
+            local reagentItemID = reagent["reagentItemID"]
+            local reagentName = reagent["reagentName"]
+            if not reagentItemID or not reagentName then
+                self:error("Open and close skill to get all information")
+                return
+            end
+            -- print('Index: ', reagentItemID, reagentName)
             -- local reagentItemID, reagentName, reagentTexture, reagentCount, playerReagentCount, reagentLink = reagent
             -- print('Multi: ', reagentItemID)
             if profession:DifficultyToNum(recipe['difficulty']) > 1 then
