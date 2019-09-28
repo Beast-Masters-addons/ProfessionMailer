@@ -47,19 +47,12 @@ local function SaveReagents()
 end
 
 function frame:OnEvent(event, arg1)
-
     if event == "ADDON_LOADED" and arg1 == "ProfessionMailer" then
-        frame:RegisterEvent("TRADE_SKILL_SHOW");
-        frame:RegisterEvent("TRADE_SKILL_DATA_SOURCE_CHANGED");
-        frame:RegisterEvent("TRADE_SKILL_LIST_UPDATE");
-        frame:RegisterEvent("TRADE_SKILL_DETAILS_UPDATE");
+        frame:RegisterEvent("TRADE_SKILL_UPDATE")
         init_variables()
-        owned_items = GetBags()
-    else
-        print('Skill show')
-        if profession:IsReady() then
-            SaveReagents()
-        end
+        owned_items = GetBagsSlots()
+    elseif event == "TRADE_SKILL_UPDATE" and profession:IsReady() then
+        SaveReagents()
     end
 end
 
