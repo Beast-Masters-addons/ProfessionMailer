@@ -16,7 +16,7 @@
     </Frame>
     <Frame name="NeedFrame" enableMouse="true" movable="true" parent="UIParent" hidden="true">
         <Size>
-            <AbsDimension x="300" y="500"/>
+            <AbsDimension x="500" y="500"/>
         </Size>
         <Anchors>
             <Anchor point="CENTER"/>
