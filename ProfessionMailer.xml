@@ -14,7 +14,7 @@
             </OnLeave>
         </Scripts>
     </Frame>
-    <Frame name="NeedFrame" enableMouse="true" movable="true" parent="UIParent" hidden="true">
+    <Frame name="NeedFrame" enableMouse="true" movable="true" parent="UIParent" hidden="true" frameStrata="DIALOG">
         <Size>
             <AbsDimension x="500" y="500"/>
         </Size>
@@ -43,5 +43,25 @@
                 </FontString>
             </Layer>
         </Layers>
+        <Scripts>
+            <OnMouseDown>
+                if ( button == "LeftButton" ) then
+                self:StartMoving();
+                self.isMoving = true;
+                end
+            </OnMouseDown>
+            <OnMouseUp>
+                if ( self.isMoving ) then
+                self:StopMovingOrSizing();
+                self.isMoving = false;
+                end
+            </OnMouseUp>
+            <OnHide>
+                if ( self.isMoving ) then
+                self:StopMovingOrSizing();
+                self.isMoving = false;
+                end
+            </OnHide>
+        </Scripts>
     </Frame>
 </Ui>
