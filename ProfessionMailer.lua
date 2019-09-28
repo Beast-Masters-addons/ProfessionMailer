@@ -56,7 +56,7 @@ function addon:SaveReagents()
             -- local reagentItemID, reagentName, reagentTexture, reagentCount, playerReagentCount, reagentLink = reagent
             -- print('Multi: ', reagentItemID)
             if profession:DifficultyToNum(recipe['difficulty']) > 1 then
-                CharacterNeeds[character_name][professionName][reagentItemID] = reagent
+                CharacterNeeds[character_name][professionName][reagentItemID] = {["recipe"]=recipe, ["reagent"]=reagent}
             end
         end
     end
