@@ -37,7 +37,26 @@
                 <FontString name="NeedText" inherits="GameFontWhite">
                     <Anchors>
                         <Anchor point="TOPLEFT">
-                            <Offset x="5" y="5"/>
+                            <Offset x="15" y="-25"/>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="BACKGROUND">
+                <Texture file="Interface\PaperDollInfoFrame\UI-GearManager-Title-Background">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset x="9" y="-6" />
+                        </Anchor>
+                        <Anchor point="BOTTOMRIGHT" relativeTo="NeedFrame" relativePoint="TOPRIGHT">
+                            <Offset x="-28" y="-24" />
+                        </Anchor>
+                    </Anchors>
+                </Texture>
+                <FontString name="HeaderText" inherits="GameFontWhite">
+                    <Anchors>
+                        <Anchor point="TOP">
+                            <Offset x="0" y="-11"/>
                         </Anchor>
                     </Anchors>
                 </FontString>
