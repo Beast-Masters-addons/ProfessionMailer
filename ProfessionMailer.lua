@@ -25,12 +25,21 @@ local function init_variables()
 end
 
 function addon:SaveReagents()
-    local professionName, skillLineRank, skillLineMaxRank, skillLineModifier = profession:GetInfo()
+    local professionName = profession:GetInfo()
+    if professionName == 'UNKNOWN' then
+        return
+    end
+    self:cprint("Saving reagents for " .. professionName)
+
     if CharacterNeeds[character_name][professionName] == nil then
         CharacterNeeds[character_name][professionName] = {}
     end
 
     local recipes = profession:GetRecipes()
+    if not recipes or #recipes == 0 then
+        self:error('No recipes found, close and reopen the profession window')
+        return
+    end
     print('Recipes:', recipes)
     for recipeID, recipe in pairs(recipes) do
         print('recipeID:', recipeID)
