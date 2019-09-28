@@ -144,6 +144,32 @@ end
 
 frame:SetScript("OnEvent", frame.OnEvent);
 
+function addon:need_mail(character)
+    local needed_have = addon:needed(character)
+    if not needed_have then
+        return
+    end
+    local positions = inventory:GetBags()
+
+    local item
+    local position
+
+    for key, itemID in pairs(needed_have) do
+        --print('Need mail', itemID)
+        item = owned_items[itemID]
+        position = positions[itemID]
+        --print(item["itemID"], key, position["bag"], position["slot"])
+        PickupContainerItem(position["bag"], position["slot"])
+        ClickSendMailItemButton(key)
+    end
+end
+
+SLASH_NEEDMAIL1 = "/needmail"
+SlashCmdList["NEEDMAIL"] = function(msg)
+    local character = utils:get_char_string(msg)
+    addon:need_mail(character)
+end
+
 SLASH_NEEDCLEAR1 = "/needclear"
 SlashCmdList["NEEDCLEAR"] = function()
     CharacterNeeds = {}
