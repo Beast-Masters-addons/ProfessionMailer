@@ -101,12 +101,9 @@ end
 
 frame:SetScript("OnEvent", frame.OnEvent);
 
-SLASH_SAVE1 = "/looptest"
-
-SlashCmdList["SAVE"] = function(msg)
-    local recipes = profession:GetRecipes()
-    for id, value in pairs(recipes) do
-        print(id, value)
-        print(value['name'])
-    end
+SLASH_NEEDCLEAR1 = "/needclear"
+SlashCmdList["NEEDCLEAR"] = function()
+    CharacterNeeds = {}
+    init_variables()
+    addon:cprint("Cleared all saved needs", 0, 255, 0)
 end
