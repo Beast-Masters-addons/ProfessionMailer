@@ -13,8 +13,7 @@ function addon:GetBags()
             --local itemLink = GetContainerItemLink(bag, slot)
             local icon, itemCount, locked, quality, readable, lootable, itemLink, isFiltered, noValue, itemID = GetContainerItemInfo(bag, slot)
             if itemID ~= nil then
-                items[itemID] = GetContainerItemInfo(bag, slot)
-                items[itemID] = {["icon"]=icon, ["itemCount"]=itemCount, ["locked"]=locked, ["quality"]=quality, ["readable"]=readable, ["lootable"]=lootable, ["itemLink"]=itemLink, ["isFiltered"]=isFiltered, ["noValue"]=noValue, ["itemID"]=itemID}
+                items[itemID] = {["bag"]=bag, ["slot"]=slot, ["icon"]=icon, ["itemCount"]=itemCount, ["locked"]=locked, ["quality"]=quality, ["readable"]=readable, ["lootable"]=lootable, ["itemLink"]=itemLink, ["isFiltered"]=isFiltered, ["noValue"]=noValue, ["itemID"]=itemID}
             end
         end
     end
