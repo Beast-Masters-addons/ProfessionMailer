@@ -40,10 +40,8 @@ function addon:SaveReagents()
         self:error('No recipes found, close and reopen the profession window')
         return
     end
-    print('Recipes:', recipes)
     for recipeID, recipe in pairs(recipes) do
-        print('recipeID:', recipeID)
-        print(recipe['name'])
+        --print('recipeID:', recipeID)
         local reagents = profession:GetReagents(recipeID)
         for _, reagent in pairs(reagents) do
             local reagentItemID = reagent["reagentItemID"]
@@ -52,9 +50,7 @@ function addon:SaveReagents()
                 self:error("Open and close skill to get all information")
                 return
             end
-            -- print('Index: ', reagentItemID, reagentName)
-            -- local reagentItemID, reagentName, reagentTexture, reagentCount, playerReagentCount, reagentLink = reagent
-            -- print('Multi: ', reagentItemID)
+
             if profession:DifficultyToNum(recipe['difficulty']) > 1 then
                 CharacterNeeds[character_name][professionName][reagentItemID] = {["recipe"]=recipe, ["reagent"]=reagent}
             end
