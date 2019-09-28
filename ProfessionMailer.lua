@@ -1,6 +1,8 @@
+local addonName, addon = ...
 local professions = LibStub("LibProfessions-1.0")
 local profession = professions
 --local inventory = LibStub("LibInventory-1.0")
+local inventory = addon
 local owned_items
 
 local frame = CreateFrame("FRAME"); -- Need a frame to respond to events
@@ -21,7 +23,7 @@ local function init_variables()
     -- local CurrentCharacterProfessions = CharacterProfessions[character_name]
 end
 
-local function SaveReagents()
+function addon:SaveReagents()
     local professionName, skillLineRank, skillLineMaxRank, skillLineModifier = profession:GetInfo()
     if CharacterNeeds[character_name][professionName] == nil then
         CharacterNeeds[character_name][professionName] = {}
@@ -46,13 +48,14 @@ local function SaveReagents()
     end
 end
 
+-- Event handler
 function frame:OnEvent(event, arg1)
     if event == "ADDON_LOADED" and arg1 == "ProfessionMailer" then
         frame:RegisterEvent("TRADE_SKILL_UPDATE")
         init_variables()
-        owned_items = GetBagsSlots()
+        owned_items = inventory:GetBags()
     elseif event == "TRADE_SKILL_UPDATE" and profession:IsReady() then
-        SaveReagents()
+        addon:SaveReagents()
     end
 end
 

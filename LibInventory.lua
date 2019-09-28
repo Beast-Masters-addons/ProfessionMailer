@@ -1,8 +1,9 @@
 local inv = LibStub:NewLibrary("LibInventory-1.0", 1)
 local NUM_EQUIPMENT_SLOTS = 19
+local addonName, addon = ...
 
 --/dump LibStub("LibInventory-1.0"):GetBags()
-function GetBags()
+function addon:GetBags()
     local items = {}
 
     for bag=1, 4, 1 do
