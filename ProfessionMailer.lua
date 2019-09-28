@@ -62,10 +62,13 @@ end
 function frame:OnEvent(event, arg1)
     if event == "ADDON_LOADED" and arg1 == "ProfessionMailer" then
         frame:RegisterEvent("TRADE_SKILL_UPDATE")
+        frame:RegisterEvent("BAG_NEW_ITEMS_UPDATED")
         init_variables()
         owned_items = inventory:GetBags()
     elseif event == "TRADE_SKILL_UPDATE" and profession:IsReady() then
         addon:SaveReagents()
+    elseif event == "BAG_NEW_ITEMS_UPDATED" then
+        owned_items = inventory:GetBags()
     end
 end
 
