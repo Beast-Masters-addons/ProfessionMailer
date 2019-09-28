@@ -69,34 +69,77 @@ function frame:OnEvent(event, arg1)
     end
 end
 
-local function needed(character)
-    local char
-    local lines = {""}
-    if character == nil or character == "" then
-        char = character_name
-    else
-        char = character .. '-' .. GetRealmName()
-    end
-    for professionName, need in pairs(CharacterNeeds[char]) do
-        table.insert(lines, char .. ' needs this for ' .. professionName .. ':')
-        for reagentItemID, reagent in pairs(need) do
+function addon:needed(character)
+    local needed_have = {}
+    local needs = {}
+
+    for professionName, need in pairs(CharacterNeeds[character]) do
+        for reagentItemID, craft in pairs(need) do
             if owned_items[reagentItemID] ~= nil then
-                table.insert(lines,reagent[6] .. ' you have ' .. owned_items[reagentItemID]['itemCount'])
-            else
-                table.insert(lines, reagent[6])
+                table.insert(needed_have, reagentItemID)
+                table.insert(needs, {["item"]=owned_items[reagentItemID], ["profession"]=professionName, ["recipe"]=craft["recipe"]})
+                --print('Needed have', owned_items[reagentItemID]["itemID"], owned_items[reagentItemID]["bag"], owned_items[reagentItemID]["slot"])
             end
         end
     end
-    return lines
+    return needed_have, needs
+end
+
+-- Build a string with needed item links
+function addon:need_string_links(character)
+    local need_string_lines = {}
+    local _, needs = self:needed(character)
+    if not needs then
+        return
+    end
+
+    for _, need in ipairs(needs) do
+        table.insert(need_string_lines, string.format('%s need %s for %s', character, need["item"]["itemLink"], need["recipe"]["link"]))
+    end
+    return table.concat(need_string_lines, "\n")
+end
+
+function addon:need_string_all(character)
+    local lines = {}
+
+    for professionName, items in pairs(CharacterNeeds[character]) do
+        table.insert(lines, professionName .. ':')
+        for itemID, craft in pairs(items) do
+            if owned_items[itemID] ~= nil then
+                table.insert(lines,craft["reagent"]["reagentName"] .. ' you have ' .. owned_items[itemID]['itemCount'])
+            else
+                table.insert(lines, craft["reagent"]["reagentName"])
+            end
+        end
+        table.insert(lines, "")
+    end
+    return table.concat(lines, "\r\n")
+end
+
+function addon:close_need_frame()
+    NeedFrame:Hide()
+end
+
+function addon:show_need_frame(character)
+    local close = CreateFrame("Button", "NeedCloseButton", NeedFrame, "UIPanelCloseButton")
+    close:SetPoint("TOPRIGHT", -1, -1)
+    close:SetScript("OnClick", addon.close_need_frame)
+    NeedFrame:Show()
+    NeedText:SetText(addon:need_string_all(character))
+    HeaderText:SetText(string.format("Items needed by %s", character))
 end
 
 SLASH_NEEDED1 = "/needed"
+SLASH_NEEDED2 = "/need"
 
 SlashCmdList["NEEDED"] = function(msg)
-    local lines = needed(msg)
-    NeedFrame:Show()
-    NeedText:SetText(table.concat(lines, "\n"))
-    print(table.concat(lines, "\n"))
+    local character = utils:get_char_string(msg)
+    if next(CharacterNeeds[character]) == nil then
+        utils:cprint(string.format("%s does not need anything", character), 255, 255 ,0)
+        return
+    end
+    addon:cprint(addon:need_string_links(character))
+    addon:show_need_frame(character)
 end
 
 frame:SetScript("OnEvent", frame.OnEvent);
