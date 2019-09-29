@@ -6,7 +6,14 @@
 ## SavedVariables: CharacterNeeds
 
 libs\LibStub\LibStub.lua
+
+libs\LibItems\LibInventory.lua
+libs\LibItems\LibMail.lua
+
+libs\LibProfessions\LibProfessions.lua
+libs\LibProfessions\ProfessionApi.lua
+libs\LibProfessions\CurrentProfession.lua
+
 utils.lua
-LibInventory.lua
 ProfessionMailer.lua
 ProfessionMailer.xml

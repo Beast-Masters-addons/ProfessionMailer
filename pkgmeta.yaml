@@ -7,7 +7,7 @@ externals:
   libs/LibItems:
     url: https://github.com/datagutten/wow-LibItems.git
     tag: latest
-  libs/LibProfession:
+  libs/LibProfessions:
     url: https://github.com/datagutten/wow-LibProfessions.git
     tag: latest
   libs/LibPeriodicTable:
