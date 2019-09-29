@@ -1,9 +1,9 @@
 local addonName, addon = ...
 local professions = LibStub("LibProfessions-1.0")
 local profession = professions
---local inventory = LibStub("LibInventory-1.0")
-local inventory = addon
-local owned_items
+local inventory = LibStub("LibInventory-0.1")
+local mail = LibStub("LibMail-0.1")
+
 local utils = addon
 
 local frame = CreateFrame("FRAME"); -- Need a frame to respond to events
