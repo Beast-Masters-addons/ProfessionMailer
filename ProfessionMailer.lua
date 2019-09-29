@@ -61,6 +61,9 @@ end
 -- Event handler
 function frame:OnEvent(event, arg1)
     if event == "ADDON_LOADED" and arg1 == "ProfessionMailer" then
+        --@debug@
+        utils:cprint("ProfessionMailer loaded with debug output", 0, 255, 0)
+        --@end-debug@
         frame:RegisterEvent("TRADE_SKILL_UPDATE")
         init_variables()
     elseif event == "TRADE_SKILL_UPDATE" and profession:IsReady() then
