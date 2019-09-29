@@ -62,13 +62,9 @@ end
 function frame:OnEvent(event, arg1)
     if event == "ADDON_LOADED" and arg1 == "ProfessionMailer" then
         frame:RegisterEvent("TRADE_SKILL_UPDATE")
-        frame:RegisterEvent("BAG_NEW_ITEMS_UPDATED")
         init_variables()
-        owned_items = inventory:GetBags()
     elseif event == "TRADE_SKILL_UPDATE" and profession:IsReady() then
         addon:SaveReagents()
-    elseif event == "BAG_NEW_ITEMS_UPDATED" then
-        owned_items = inventory:GetBags()
     end
 end
 
@@ -78,7 +74,8 @@ function addon:needed(character)
 
     for professionName, need in pairs(CharacterNeeds[character]) do
         for reagentItemID, craft in pairs(need) do
-            if owned_items[reagentItemID] ~= nil then
+            item = inventory:FindItem(reagentItemID)
+            if item ~= nil then
                 table.insert(needed_have, reagentItemID)
                 table.insert(needs, {["item"]=owned_items[reagentItemID], ["profession"]=professionName, ["recipe"]=craft["recipe"]})
                 --print('Needed have', owned_items[reagentItemID]["itemID"], owned_items[reagentItemID]["bag"], owned_items[reagentItemID]["slot"])
@@ -108,8 +105,9 @@ function addon:need_string_all(character)
     for professionName, items in pairs(CharacterNeeds[character]) do
         table.insert(lines, professionName .. ':')
         for itemID, craft in pairs(items) do
-            if owned_items[itemID] ~= nil then
-                table.insert(lines,craft["reagent"]["reagentName"] .. ' you have ' .. owned_items[itemID]['itemCount'])
+            item = inventory:FindItem(itemID)
+            if item ~= nil then
+                table.insert(lines,craft["reagent"]["reagentName"] .. ' you have ' .. item['itemCount'])
             else
                 table.insert(lines, craft["reagent"]["reagentName"])
             end
@@ -148,7 +146,9 @@ end
 frame:SetScript("OnEvent", frame.OnEvent);
 
 function addon:need_mail(character)
-    local needed_have = addon:needed(character)
+    local needed_have = self:needed(character)
+    utils:cprint('Send needed items to ' .. character)
+
     if not needed_have then
         return
     end
