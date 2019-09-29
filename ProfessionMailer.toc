@@ -1,5 +1,5 @@
 ## Interface: 11302
-## Version: 0.1
+## Version: 0.2
 ## Author: datagutten
 ## Title: ProfessionMailer
 ## Notes: Send materials to the character who needs them
