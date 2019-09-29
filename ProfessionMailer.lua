@@ -152,19 +152,22 @@ function addon:need_mail(character)
     if not needed_have then
         return
     end
-    local positions = inventory:GetBags()
 
-    local item
-    local position
-
-    for key, itemID in pairs(needed_have) do
-        --print('Need mail', itemID)
-        item = owned_items[itemID]
-        position = positions[itemID]
-        --print(item["itemID"], key, position["bag"], position["slot"])
-        PickupContainerItem(position["bag"], position["slot"])
-        ClickSendMailItemButton(key)
+    local stacks
+    local key = 1
+    for _, itemID in pairs(needed_have) do
+        stacks = inventory:FindItemStacks(itemID)
+        for _, position in ipairs(stacks) do
+            --@debug@
+            utils:cprint(string.format('Adding item %d from bag %d slot %d as attachment %d', itemID, position["bag"], position["slot"], key))
+            --@end-debug@
+            --TODO: Use mail:AddAttachment
+            PickupContainerItem(position["bag"], position["slot"])
+            ClickSendMailItemButton(key)
+            key = key +1
+        end
     end
+    mail:recipient(character)
 end
 
 SLASH_NEEDMAIL1 = "/needmail"
