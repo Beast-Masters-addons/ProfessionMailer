@@ -47,7 +47,7 @@ function addon:SaveReagents()
             local reagentItemID = reagent["reagentItemID"]
             local reagentName = reagent["reagentName"]
             if not reagentItemID or not reagentName then
-                self:error("Open and close skill to get all information")
+                self:error("Close and re-open profession to get all information")
                 return
             end
 
