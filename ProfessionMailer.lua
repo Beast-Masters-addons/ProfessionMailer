@@ -71,14 +71,14 @@ end
 function addon:needed(character)
     local needed_have = {}
     local needs = {}
+    local item
 
     for professionName, need in pairs(CharacterNeeds[character]) do
         for reagentItemID, craft in pairs(need) do
             item = inventory:FindItem(reagentItemID)
             if item ~= nil then
                 table.insert(needed_have, reagentItemID)
-                table.insert(needs, {["item"]=owned_items[reagentItemID], ["profession"]=professionName, ["recipe"]=craft["recipe"]})
-                --print('Needed have', owned_items[reagentItemID]["itemID"], owned_items[reagentItemID]["bag"], owned_items[reagentItemID]["slot"])
+                table.insert(needs, {["item"]=item, ["profession"]=professionName, ["recipe"]=craft["recipe"]})
             end
         end
     end
@@ -101,6 +101,7 @@ end
 
 function addon:need_string_all(character)
     local lines = {}
+    local item
 
     for professionName, items in pairs(CharacterNeeds[character]) do
         table.insert(lines, professionName .. ':')
