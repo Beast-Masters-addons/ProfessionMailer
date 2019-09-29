@@ -137,7 +137,7 @@ SLASH_NEEDED2 = "/need"
 
 SlashCmdList["NEEDED"] = function(msg)
     local character = utils:get_char_string(msg)
-    if next(CharacterNeeds[character]) == nil then
+    if CharacterNeeds[character] == nil or next(CharacterNeeds[character]) == nil then
         utils:cprint(string.format("%s does not need anything", character), 255, 255 ,0)
         return
     end
