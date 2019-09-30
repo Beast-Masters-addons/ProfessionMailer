@@ -38,7 +38,7 @@ function addon:SaveReagents()
     end
 
     local recipes = profession:GetRecipes()
-    if not recipes or #recipes == 0 then
+    if not recipes or recipes == {} then
         self:error('No recipes found, close and reopen the profession window')
         return
     end
