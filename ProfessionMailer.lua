@@ -64,10 +64,22 @@ function frame:OnEvent(event, arg1)
         --@debug@
         utils:cprint("ProfessionMailer loaded with debug output", 0, 255, 0)
         --@end-debug@
-        frame:RegisterEvent("TRADE_SKILL_UPDATE")
+        frame:RegisterEvent("TRADE_SKILL_SHOW")
         init_variables()
-    elseif event == "TRADE_SKILL_UPDATE" and profession:IsReady() then
-        addon:SaveReagents()
+    elseif event == "TRADE_SKILL_SHOW" then
+        if utils:IsWoWClassic() then
+            frame:RegisterEvent("TRADE_SKILL_UPDATE")
+        else
+            frame:RegisterEvent("TRADE_SKILL_LIST_UPDATE")
+        end
+    elseif event == "TRADE_SKILL_LIST_UPDATE" or event == "TRADE_SKILL_UPDATE" and profession:IsReady() then
+        local success = addon:SaveReagents()
+        --Unregister events after saving
+        if utils:IsWoWClassic() then
+            frame:UnregisterEvent("TRADE_SKILL_UPDATE")
+        else
+            frame:UnregisterEvent("TRADE_SKILL_LIST_UPDATE")
+        end
     end
 end
 
