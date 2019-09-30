@@ -29,7 +29,9 @@ function addon:SaveReagents()
     if professionName == 'UNKNOWN' then
         return
     end
+    --@debug@
     self:cprint("Saving reagents for " .. professionName)
+    --@end-debug@
 
     if CharacterNeeds[character_name][professionName] == nil then
         CharacterNeeds[character_name][professionName] = {}
@@ -56,6 +58,7 @@ function addon:SaveReagents()
             end
         end
     end
+    self:cprint("Successfully saved reagents")
 end
 
 -- Event handler
