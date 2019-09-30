@@ -27,3 +27,7 @@ function addon:get_char_string(character, realm)
     character, realm = self:get_char(character, realm)
     return string.format('%s-%s', character, realm)
 end
+
+function addon:IsWoWClassic()
+    return select(4, GetBuildInfo()) < 20000
+end
