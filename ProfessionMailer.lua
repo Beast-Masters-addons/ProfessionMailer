@@ -49,12 +49,13 @@ function addon:SaveReagents()
             local reagentItemID = reagent["reagentItemID"]
             local reagentName = reagent["reagentName"]
             if not reagentItemID or not reagentName then
-                self:error("Close and re-open profession to get all information")
-                return
-            end
-
-            if profession:DifficultyToNum(recipe['difficulty']) > 1 then
-                CharacterNeeds[character_name][professionName][reagentItemID] = {["recipe"]=recipe, ["reagent"]=reagent}
+                if utils:IsWoWClassic() then --No need to retry in BfA, if it does not work on first attempt, it will never work
+                    self:error("Close and re-open profession to get all information")
+                end
+            else
+                if profession:DifficultyToNum(recipe['difficulty']) > 1 then
+                    CharacterNeeds[character_name][professionName][reagentItemID] = {["recipe"]=recipe, ["reagent"]=reagent}
+                end
             end
         end
     end
