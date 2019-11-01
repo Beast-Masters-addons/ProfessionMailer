@@ -2157,7 +2157,10 @@ if [ -z "$skip_zipfile" ]; then
 				"https://httpbin.org/post" ) &&
 		{
 			case $result in
-				200) echo "Success!" ;;
+				200) echo "Success!"
+                    if [ -s "$resultfile" ]; then
+						echo "$(<"$resultfile")"
+					fi;;
 				302)
 					echo "Error! ($result)"
 					# don't need to ouput the redirect page
