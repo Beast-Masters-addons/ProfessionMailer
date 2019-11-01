@@ -10,6 +10,7 @@
 ## Notes: Send materials to the character who needs them
 ## SavedVariables: CharacterNeeds
 ## X-Curse-Project-ID: 342943
+## OptionalDeps: LibPeriodicTable-3.1
 
 #@no-lib-strip@
 libs\LibStub\LibStub.lua
