@@ -2,7 +2,7 @@ local _, addon = ...
 
 -- Add a message to chat frame with colors
 function addon:cprint(message, r, g, b)
-    local DEFAULT_FONT_COLOR = {["R"]=255, ["G"]=255, ["G"]=255}
+    local DEFAULT_FONT_COLOR = {["R"]=255, ["G"]=255, ["B"]=255}
     DEFAULT_CHAT_FRAME:AddMessage(message,
             (r or DEFAULT_FONT_COLOR["R"]),
             (g or DEFAULT_FONT_COLOR["G"]),
