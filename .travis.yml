@@ -1,15 +1,5 @@
 language: minimal
 
-addons:
-  apt:
-    packages:
-      - luarocks
-
-install: luarocks install --local luacheck
-
-before_script:
-  - /home/travis/.luarocks/bin/luacheck . --no-color -q -g --no-self
-
 script:
   - chmod +x release.sh
   - ./release.sh -g 1.13.2
