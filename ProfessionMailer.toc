@@ -11,6 +11,7 @@
 ## SavedVariables: CharacterNeeds
 ## X-Curse-Project-ID: 342943
 
+#@no-lib-strip@
 libs\LibStub\LibStub.lua
 
 libs\LibItems\LibInventory.lua
@@ -19,6 +20,7 @@ libs\LibItems\LibMail.lua
 libs\LibProfessions\LibProfessions.lua
 libs\LibProfessions\ProfessionApi.lua
 libs\LibProfessions\CurrentProfession.lua
+#@end-no-lib-strip@
 
 utils.lua
 ProfessionMailer.lua
