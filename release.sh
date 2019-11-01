@@ -2154,7 +2154,7 @@ if [ -z "$skip_zipfile" ]; then
 				-H "x-api-token: $cf_token" \
 				-F "metadata=<-" \
 				-F "file=@$archive" \
-				"$project_site/api/projects/$slug/upload-file" ) &&
+				"https://httpbin.org/post" ) &&
 		{
 			case $result in
 				200) echo "Success!" ;;
