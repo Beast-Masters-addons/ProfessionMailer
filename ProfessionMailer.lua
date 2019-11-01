@@ -49,12 +49,14 @@ function addon:SaveReagents()
             local reagentItemID = reagent["reagentItemID"]
             local reagentName = reagent["reagentName"]
             if not reagentItemID or not reagentName then
-                if utils:IsWoWClassic() then --No need to retry in BfA, if it does not work on first attempt, it will never work
+                --No need to retry in BfA, if it does not work on first attempt, it will never work
+                if utils:IsWoWClassic() then
                     self:error("Close and re-open profession to get all information")
                 end
             else
                 if profession:DifficultyToNum(recipe['difficulty']) > 1 then
-                    CharacterNeeds[character_name][professionName][reagentItemID] = {["recipe"]=recipe, ["reagent"]=reagent}
+                    CharacterNeeds[character_name][professionName][reagentItemID] = {["recipe"]=recipe,
+                                                                                     ["reagent"]=reagent}
                 end
             end
         end
@@ -113,7 +115,10 @@ function addon:need_string_links(character)
     end
 
     for _, need in ipairs(needs) do
-        table.insert(need_string_lines, string.format('%s need %s for %s', character, need["item"]["itemLink"], need["recipe"]["link"]))
+        table.insert(need_string_lines, string.format(
+                '%s need %s for %s', character,
+                                                    need["item"]["itemLink"],
+                                                    need["recipe"]["link"]))
     end
     return table.concat(need_string_lines, "\n")
 end
@@ -179,7 +184,8 @@ function addon:need_mail(character)
         stacks = inventory:FindItemStacks(itemID)
         for _, position in ipairs(stacks) do
             --@debug@
-            utils:cprint(string.format('Adding item %d from bag %d slot %d as attachment %d', itemID, position["bag"], position["slot"], key))
+            utils:cprint(string.format('Adding item %d from bag %d slot %d as attachment %d',
+                                        itemID, position["bag"], position["slot"], key))
             --@end-debug@
             --TODO: Use mail:AddAttachment
             PickupContainerItem(position["bag"], position["slot"])
