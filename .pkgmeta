@@ -15,4 +15,3 @@ externals:
 required-dependencies:
   - LibProfessions
   - LibItems
-  - LibStub
