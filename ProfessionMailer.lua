@@ -1,6 +1,7 @@
 local _, addon = ...
-local professions = LibStub("LibProfessions-1.0")
-local profession = professions
+local profession = LibStub("LibCurrentProfession-1.0")
+local profession_api = LibStub("LibProfessionAPI-1.0")
+
 local inventory = LibStub("LibInventory-0.1")
 local mail = LibStub("LibMail-0.1")
 
@@ -25,7 +26,7 @@ local function init_variables()
 end
 
 function addon:SaveReagents()
-    local professionName = profession:GetInfo()
+    local professionName = profession_api:GetInfo()
     if professionName == 'UNKNOWN' then
         return
     end
@@ -78,7 +79,7 @@ function frame:OnEvent(event, arg1)
         else
             frame:RegisterEvent("TRADE_SKILL_LIST_UPDATE")
         end
-    elseif event == "TRADE_SKILL_LIST_UPDATE" or event == "TRADE_SKILL_UPDATE" and profession:IsReady() then
+    elseif event == "TRADE_SKILL_LIST_UPDATE" or event == "TRADE_SKILL_UPDATE" and profession_api:IsReady() then
         addon:SaveReagents()
         --Unregister events after saving
         if utils:IsWoWClassic() then
