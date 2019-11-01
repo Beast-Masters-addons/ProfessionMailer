@@ -79,7 +79,7 @@ function frame:OnEvent(event, arg1)
             frame:RegisterEvent("TRADE_SKILL_LIST_UPDATE")
         end
     elseif event == "TRADE_SKILL_LIST_UPDATE" or event == "TRADE_SKILL_UPDATE" and profession:IsReady() then
-        local success = addon:SaveReagents()
+        addon:SaveReagents()
         --Unregister events after saving
         if utils:IsWoWClassic() then
             frame:UnregisterEvent("TRADE_SKILL_UPDATE")
