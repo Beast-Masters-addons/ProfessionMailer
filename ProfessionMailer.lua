@@ -55,7 +55,6 @@ function addon:SaveReagents()
                     self:error("Close and re-open profession to get all information")
                 end
             else
-                if profession:DifficultyToNum(recipe['difficulty']) > 1 then
                     CharacterNeeds[character_name][professionName][reagentItemID] = {["recipe"]=recipe,
                                                                                      ["reagent"]=reagent}
                 end
@@ -98,7 +97,8 @@ function addon:needed(character)
     for professionName, need in pairs(CharacterNeeds[character]) do
         for reagentItemID, craft in pairs(need) do
             item = inventory:FindItem(reagentItemID)
-            if item ~= nil then
+            local difficulty = profession:DifficultyToNum(craft["recipe"]["difficulty"])
+            if item ~= nil and difficulty>1 then
                 table.insert(needed_have, reagentItemID)
                 table.insert(needs, {["item"]=item, ["profession"]=professionName, ["recipe"]=craft["recipe"]})
             end
