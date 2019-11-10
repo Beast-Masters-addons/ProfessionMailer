@@ -107,6 +107,19 @@ function addon:needed(character)
     return needed_have, needs
 end
 
+function addon:who_needs(itemID)
+    for character, professions in pairs(CharacterNeeds) do
+        for _, need in pairs(professions) do
+            for reagentItemID, craft in pairs(need) do
+                if reagentItemID == itemID then
+                    local color = profession:DifficultyColor(craft["recipe"]["difficulty"])
+                    GameTooltip:AddLine(string.format('%s: %s', addon:stripRealm(character), craft["recipe"]["name"]), color['r'], color['g'], color['b'])
+                end
+            end
+        end
+    end
+end
+
 -- Build a string with needed item links
 function addon:need_string_links(character)
     local need_string_lines = {}
@@ -170,6 +183,13 @@ SlashCmdList["NEEDED"] = function(msg)
 end
 
 frame:SetScript("OnEvent", frame.OnEvent);
+
+GameTooltip:HookScript("OnTooltipSetItem", function(self)
+    local _, link = self:GetItem()
+    if not link then return end
+    local id = addon:idFromLink(link)
+    addon:who_needs(id)
+end)
 
 function addon:need_mail(character)
     local needed_have = self:needed(character)
