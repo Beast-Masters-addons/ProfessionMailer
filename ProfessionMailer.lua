@@ -4,13 +4,12 @@ local profession_api = LibStub("LibProfessionAPI-1.0")
 
 local inventory = LibStub("LibInventory-0.1")
 local mail = LibStub("LibMail-0.1")
-
-local utils = addon
+local utils = LibStub("BM-utils-1.0")
 
 local frame = CreateFrame("FRAME"); -- Need a frame to respond to events
 frame:RegisterEvent("ADDON_LOADED"); -- Fired when saved variables are loaded
 
-local character_name = utils:get_char_string()
+local character_name = utils:GetCharacterString()
 
 local function init_variables()
     --CharacterProfessions = {}
@@ -31,7 +30,7 @@ function addon:SaveReagents()
         return
     end
     --@debug@
-    self:cprint("Saving reagents for " .. professionName)
+    utils:cprint("Saving reagents for " .. professionName)
     --@end-debug@
 
     if CharacterNeeds[character_name][professionName] == nil then
@@ -52,16 +51,15 @@ function addon:SaveReagents()
             if not reagentItemID or not reagentName then
                 --No need to retry in BfA, if it does not work on first attempt, it will never work
                 if utils:IsWoWClassic() then
-                    self:error("Close and re-open profession to get all information")
+                    utils:error("Close and re-open profession to get all information")
                 end
             else
                     CharacterNeeds[character_name][professionName][reagentItemID] = {["recipe"]=recipe,
                                                                                      ["reagent"]=reagent}
-                end
             end
         end
     end
-    self:cprint("Successfully saved reagents")
+    utils:cprint("Successfully saved reagents")
 end
 
 -- Event handler
@@ -113,7 +111,8 @@ function addon:who_needs(itemID)
             for reagentItemID, craft in pairs(need) do
                 if reagentItemID == itemID then
                     local color = profession:DifficultyColor(craft["recipe"]["difficulty"])
-                    GameTooltip:AddLine(string.format('%s: %s', addon:stripRealm(character), craft["recipe"]["name"]), color['r'], color['g'], color['b'])
+                    local char, realm = utils:SplitCharacterString(character)
+                    GameTooltip:AddLine(string.format('%s: %s', char, craft["recipe"]["name"]), color['r'], color['g'], color['b'])
                 end
             end
         end
@@ -123,6 +122,7 @@ end
 -- Build a string with needed item links
 function addon:need_string_links(character)
     local need_string_lines = {}
+    local text
     local _, needs = self:needed(character)
     if not needs then
         return
@@ -173,12 +173,12 @@ SLASH_NEEDED1 = "/needed"
 SLASH_NEEDED2 = "/need"
 
 SlashCmdList["NEEDED"] = function(msg)
-    local character = utils:get_char_string(msg)
+    local character = utils:GetCharacterString(msg)
     if CharacterNeeds[character] == nil or next(CharacterNeeds[character]) == nil then
         utils:cprint(string.format("%s does not need anything", character), 255, 255 ,0)
         return
     end
-    addon:cprint(addon:need_string_links(character))
+    utils:cprint(addon:need_string_links(character))
     addon:show_need_frame(character)
 end
 
@@ -187,7 +187,7 @@ frame:SetScript("OnEvent", frame.OnEvent);
 GameTooltip:HookScript("OnTooltipSetItem", function(self)
     local _, link = self:GetItem()
     if not link then return end
-    local id = addon:idFromLink(link)
+    local id = utils:ItemIdFromLink(link)
     addon:who_needs(id)
 end)
 
@@ -219,7 +219,7 @@ end
 
 SLASH_NEEDMAIL1 = "/needmail"
 SlashCmdList["NEEDMAIL"] = function(msg)
-    local character = utils:get_char_string(msg)
+    local character = utils:GetCharacterString(msg)
     addon:need_mail(character)
 end
 
