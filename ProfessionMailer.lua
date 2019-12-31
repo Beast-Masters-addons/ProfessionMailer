@@ -1,31 +1,38 @@
-local _, addon = ...
-local profession = LibStub("LibCurrentProfession-1.0")
-local profession_api = LibStub("LibProfessionAPI-1.0")
+local addon = {}
+_G['ProfessionMailer'] = addon
+addon.data = _G['ProfessionData']
 
-local inventory = LibStub("LibInventory-0.1")
-local mail = LibStub("LibMail-0.1")
-local utils = LibStub("BM-utils-1.0")
+local profession = _G['CurrentProfession']
+local profession_api = _G['ProfessionAPI']
+local inventory = _G['LibInventory']
+local mail = _G['LibMail']
+local utils = _G['BMUtils1']
+
+if LibStub then
+    profession = LibStub("LibCurrentProfession-1.1")
+    profession_api = LibStub("LibProfessionAPI-1.0")
+    inventory = LibStub("LibInventory-0.1")
+    mail = LibStub("LibMail-0.2")
+    utils = LibStub("BM-utils-1.0")
+end
 
 local frame = CreateFrame("FRAME"); -- Need a frame to respond to events
 frame:RegisterEvent("ADDON_LOADED"); -- Fired when saved variables are loaded
 
-local character_name = utils:GetCharacterString()
+local character_id = utils:GetCharacterString()
+local character_name, realm = utils:GetCharacterInfo()
 
-local function init_variables()
-    --CharacterProfessions = {}
-    --CharacterProfessions[character_name] = {}
-    if CharacterNeeds == nil then
-        CharacterNeeds = {}
-    end
-
-    if CharacterNeeds[character_name] == nil then
-        CharacterNeeds[character_name] = {}
-    end
-    -- local CurrentCharacterProfessions = CharacterProfessions[character_name]
+function addon:init_variables()
+    self.data:init_table('ItemRecipes')
+    self.data:init_table('RecipeReagents')
+    self.data:init_table('CharacterDifficulty', character_id)
+    self.data:init_table('CharacterProfessions', character_id)
 end
 
+--/dump ProfessionMailer:SaveReagents()
 function addon:SaveReagents()
-    local professionName = profession_api:GetInfo()
+    local professionName, rank, maxRank = profession_api:GetInfo()
+    local craftItemId
     if professionName == 'UNKNOWN' then
         return
     end
@@ -33,18 +40,19 @@ function addon:SaveReagents()
     utils:cprint("Saving reagents for " .. professionName)
     --@end-debug@
 
-    if CharacterNeeds[character_name][professionName] == nil then
-        CharacterNeeds[character_name][professionName] = {}
-    end
-
     local recipes = profession:GetRecipes()
     if not recipes or recipes == {} then
-        self:error('No recipes found, close and reopen the profession window')
+        utils:error('No recipes found, close and reopen the profession window')
         return
     end
     for recipeID, recipe in pairs(recipes) do
         --print('recipeID:', recipeID)
+        craftItemId = utils:ItemIdFromLink(recipe['link'])
+        recipes[recipeID]['craftItemId'] = craftItemId
+        --ItemRecipes
         local reagents = profession:GetReagents(recipeID)
+        _G['RecipeReagents'][craftItemId] = reagents
+
         for _, reagent in pairs(reagents) do
             local reagentItemID = reagent["reagentItemID"]
             local reagentName = reagent["reagentName"]
@@ -54,11 +62,23 @@ function addon:SaveReagents()
                     utils:error("Close and re-open profession to get all information")
                 end
             else
-                    CharacterNeeds[character_name][professionName][reagentItemID] = {["recipe"]=recipe,
-                                                                                     ["reagent"]=reagent}
+                if not _G['ItemRecipes'][reagentItemID] then
+                    _G['ItemRecipes'][reagentItemID] = {}
+                end
+                if not _G['ItemRecipes'][reagentItemID][craftItemId] then
+                    _G['ItemRecipes'][reagentItemID][craftItemId] = {name = recipe['name'],
+                                                                     itemID = craftItemId}
+                    _G['CharacterDifficulty'][character_id][craftItemId] = recipe['difficulty']
+                end
             end
         end
     end
+    _G['CharacterProfessions'][character_id][professionName] = {
+        recipes = recipes,
+        skill = {current = rank,
+                 max = maxRank
+        },
+    }
     utils:cprint("Successfully saved reagents")
 end
 
@@ -69,7 +89,7 @@ function frame:OnEvent(event, arg1)
         utils:cprint("ProfessionMailer loaded with debug output", 0, 255, 0)
         --@end-debug@
         frame:RegisterEvent("TRADE_SKILL_SHOW")
-        init_variables()
+        addon:init_variables()
     elseif event == "TRADE_SKILL_SHOW" then
         if utils:IsWoWClassic() then
             frame:RegisterEvent("TRADE_SKILL_UPDATE")
@@ -87,73 +107,55 @@ function frame:OnEvent(event, arg1)
     end
 end
 
-function addon:needed(character)
+--/dump ProfessionMailer:characterNeeds("Quadduo-Mirage Raceway")
+--- Find items in you inventory that another character needs
+function addon:characterNeeds(character)
     local needed_have = {}
     local needs = {}
-    local item
-
-    for professionName, need in pairs(CharacterNeeds[character]) do
-        for reagentItemID, craft in pairs(need) do
-            item = inventory:FindItem(reagentItemID)
-            local difficulty = profession:DifficultyToNum(craft["recipe"]["difficulty"])
-            if item ~= nil and difficulty>1 then
-                table.insert(needed_have, reagentItemID)
-                table.insert(needs, {["item"]=item, ["profession"]=professionName, ["recipe"]=craft["recipe"]})
+    local craftedItemId, reagents, item
+    for professionName, professionInfo in pairs(_G['CharacterProfessions'][character]) do
+        for _, recipe in pairs(professionInfo['recipes']) do
+            craftedItemId = recipe['craftItemId']
+            reagents = _G['RecipeReagents'][craftedItemId]
+            for _, reagent in ipairs(reagents) do
+                item = inventory:FindItem(reagent['reagentItemID'])
+                local difficulty = utils:DifficultyToNum(recipe["difficulty"])
+                utils:printf('%s need %s for %s', character, reagent['reagentItemID'], recipe['craftItemId'])
+                if item ~= nil and difficulty>1 then
+                    table.insert(needed_have, reagent['reagentItemID'])
+                    table.insert(needs, {
+                        item = item,
+                        profession = professionName,
+                        recipe = recipe,
+                    })
+                end
             end
         end
     end
     return needed_have, needs
 end
 
-function addon:who_needs(itemID)
-    for character, professions in pairs(CharacterNeeds) do
-        for _, need in pairs(professions) do
-            for reagentItemID, craft in pairs(need) do
-                if reagentItemID == itemID then
-                    local color = profession:DifficultyColor(craft["recipe"]["difficulty"])
-                    local char, realm = utils:SplitCharacterString(character)
-                    GameTooltip:AddLine(string.format('%s: %s', char, craft["recipe"]["name"]), color['r'], color['g'], color['b'])
-                end
-            end
-        end
-    end
-end
 
--- Build a string with needed item links
+--- Build a string with needed item links
 function addon:need_string_links(character)
     local need_string_lines = {}
     local text
-    local _, needs = self:needed(character)
+    local _, needs = self:characterNeeds(character)
     if not needs then
         return
     end
 
     for _, need in ipairs(needs) do
-        table.insert(need_string_lines, string.format(
+        local color = utils:DifficultyColor(need["recipe"]["difficulty"], true)
+        text = string.format(
                 '%s need %s for %s', character,
-                                                    need["item"]["itemLink"],
-                                                    need["recipe"]["link"]))
+                need["item"]["itemLink"],
+                need["recipe"]["link"])
+        text = color:WrapTextInColorCode(text)
+
+        table.insert(need_string_lines, text)
     end
     return table.concat(need_string_lines, "\n")
-end
-
-function addon:need_string_all(character)
-    local lines = {}
-    local item
-
-    for professionName, items in pairs(CharacterNeeds[character]) do
-        table.insert(lines, professionName .. ':')
-        for itemID, craft in pairs(items) do
-            item = inventory:FindItem(itemID)
-            if item ~= nil then
-                table.insert(lines,craft["reagent"]["reagentName"] .. ' you have ' .. item['itemCount'])
-            else
-                table.insert(lines, craft["reagent"]["reagentName"])
-            end
-        end
-        table.insert(lines, "")
-    end
-    return table.concat(lines, "\r\n")
 end
 
 function addon:close_need_frame()
@@ -165,7 +167,7 @@ function addon:show_need_frame(character)
     close:SetPoint("TOPRIGHT", -1, -1)
     close:SetScript("OnClick", addon.close_need_frame)
     NeedFrame:Show()
-    NeedText:SetText(addon:need_string_all(character))
+    NeedText:SetText(addon:need_string_links(character))
     HeaderText:SetText(string.format("Items needed by %s", character))
 end
 
@@ -174,11 +176,12 @@ SLASH_NEEDED2 = "/need"
 
 SlashCmdList["NEEDED"] = function(msg)
     local character = utils:GetCharacterString(msg)
-    if CharacterNeeds[character] == nil or next(CharacterNeeds[character]) == nil then
+    local links = addon:need_string_links(character)
+    if not links then
         utils:cprint(string.format("%s does not need anything", character), 255, 255 ,0)
         return
     end
-    utils:cprint(addon:need_string_links(character))
+    utils:cprint(links)
     addon:show_need_frame(character)
 end
 
@@ -188,11 +191,29 @@ GameTooltip:HookScript("OnTooltipSetItem", function(self)
     local _, link = self:GetItem()
     if not link then return end
     local id = utils:ItemIdFromLink(link)
-    addon:who_needs(id)
+    addon:needTooltip(id)
 end)
 
+function addon:needTooltip(itemID)
+    local needs = self.data:whoNeeds(itemID)
+    if not needs then return end
+    local color, character
+    for _, need in ipairs(needs) do
+        color = utils:DifficultyColor(need['difficulty'])
+        local need_char, need_realm = utils:SplitCharacterString(need['character'])
+
+        if need_realm == realm then
+            character = need_char
+        else
+            character = need['character']
+        end
+
+        GameTooltip:AddLine(string.format('%s: %s', character , need["name"]), color['r'], color['g'], color['b'])
+    end
+end
+
 function addon:need_mail(character)
-    local needed_have = self:needed(character)
+    local needed_have = self:characterNeeds(character)
     utils:cprint('Send needed items to ' .. character)
 
     if not needed_have then
@@ -225,7 +246,10 @@ end
 
 SLASH_NEEDCLEAR1 = "/needclear"
 SlashCmdList["NEEDCLEAR"] = function()
-    CharacterNeeds = {}
-    init_variables()
+    _G['ItemRecipes'] = {}
+    _G['CharacterDifficulty'] = {}
+    _G['CharacterProfessions'] = {}
+    _G['RecipeReagents'] = {}
+    addon:init_variables()
     addon:cprint("Cleared all saved needs", 0, 255, 0)
 end
