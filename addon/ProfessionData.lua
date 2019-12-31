@@ -38,11 +38,9 @@ end
 --- @param itemID number Item ID to check
 --- @return table
 function lib:whoNeeds(itemID)
-	print('Who needs '.. itemID)
 	local crafts = self:ItemUsedFor(itemID)
 	if not crafts then
-		print('No known usages of item ' .. itemID)
-		print(ItemRecipes[itemID])
+		--print('No known usages of item ' .. itemID)
 		return
 	end
 	local difficulty
@@ -50,10 +48,9 @@ function lib:whoNeeds(itemID)
 	for craftedItemId, craft in pairs(crafts) do
 		--difficulty = self.RecipeDifficulty()
 		for character, difficulties in pairs(_G['CharacterDifficulty']) do
-			difficulty = _G['CharacterDifficulty'][character][craftedItemId]
-			print(character, difficulty)
+			difficulty = difficulties[craftedItemId]
 			if difficulty then
-				print(utils:sprintf('%s can use %s to craft %s with difficulty %s', character, itemID, craft['name'], difficulty))
+				--print(utils:sprintf('%s can use %s to craft %s with difficulty %s', character, itemID, craft['name'], difficulty))
 				table.insert(crafted, {
 					name = craft['name'], --Crafted item name
 					craftedItemId = craft['itemID'],
