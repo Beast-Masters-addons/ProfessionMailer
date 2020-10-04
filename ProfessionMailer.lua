@@ -20,7 +20,7 @@ local frame = CreateFrame("FRAME"); -- Need a frame to respond to events
 frame:RegisterEvent("ADDON_LOADED"); -- Fired when saved variables are loaded
 
 local character_id = utils:GetCharacterString()
-local character_name, realm = utils:GetCharacterInfo()
+local _, realm = utils:GetCharacterInfo()
 
 function addon:init_variables()
     self.data:init_table('ItemRecipes')
@@ -252,4 +252,47 @@ SlashCmdList["NEEDCLEAR"] = function()
     _G['RecipeReagents'] = {}
     addon:init_variables()
     addon:cprint("Cleared all saved needs", 0, 255, 0)
+end
+
+
+--local PT = LibStub("LibPeriodicTable-3.1")
+
+SLASH_CLOTH1 = "/mailcloth"
+SlashCmdList["CLOTH"] = function()
+    addon:MailSet("Tradeskill.Mat.ByType.Cloth")
+    --for item, value, set in PT:IterateSet("Tradeskill.Mat.ByType.Cloth") do
+    --    print(item, value, set)
+    --end
+end
+
+SLASH_MATS1 = "/sendmats"
+SLASH_MATS2 = "/mats"
+SlashCmdList["MATS"] = function(msg)
+    if msg == "cloth" then
+        addon:MailSet("Tradeskill.Mat.ByType.Cloth")
+    elseif msg == "herb" then
+        addon:MailSet("Tradeskill.Mat.ByType.Herb")
+    else
+        utils:error("Invalid mats:", msg)
+    end
+end
+
+function addon:MailSet(set)
+    local location
+    print("Mail set", set)
+    for item in PT:IterateSet(set) do
+        location = inventory:FindItem(item)
+        if location then
+            --print(string.format('item: %s bag: %s slot: %s', item, location["bag"], location["slot"]))
+            --if mail.mail_open then
+            PickupContainerItem(location["bag"], location["slot"])
+            ClickSendMailItemButton()
+            --end
+        end
+    end
+end
+
+SLASH_SCANBAGS1 = "/scanbags"
+SlashCmdList["SCANBAGS"] = function()
+    inventory:ScanAllBags()
 end

@@ -1,11 +1,6 @@
 ---Handle saved profession data
 _G['ProfessionData'] = {}
 local lib =_G['ProfessionData']
---lib.ItemRecipes = _G['ItemRecipes']
-local CharacterDifficulty = _G['CharacterDifficulty']
-local utils = _G['BMUtils1']
-utils = LibStub('BM-utils-1.0')
-
 
 --- Initialize a table as a global variable
 --- @param name string Global variable name
