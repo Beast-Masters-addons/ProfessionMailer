@@ -26,5 +26,5 @@ libs\BM-utils\addon\utils.lua
 #@end-no-lib-strip@
 addon\ProfessionData.lua
 
-ProfessionMailer.lua
-ProfessionMailer.xml
+addon\ProfessionMailer.lua
+addon\ProfessionMailer.xml
