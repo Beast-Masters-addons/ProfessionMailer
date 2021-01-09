@@ -9,7 +9,7 @@ externals:
     tag: v0.3
   libs/LibProfessions:
     url: https://github.com/datagutten/wow-LibProfessions.git
-    tag: v0.7
+    tag: v0.8
   libs/BM-utils:
     url: https://github.com/Beast-Masters-addons/BM-utils.git
     tag: v1.1.1
