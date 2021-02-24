@@ -6,13 +6,13 @@ externals:
     tag: latest
   libs/LibItems:
     url: https://github.com/datagutten/wow-LibItems.git
-    tag: v0.3
+    tag: v0.5
   libs/LibProfessions:
     url: https://github.com/datagutten/wow-LibProfessions.git
-    tag: v0.8
+    tag: v0.8.1
   libs/BM-utils:
     url: https://github.com/Beast-Masters-addons/BM-utils.git
-    tag: v1.1.1
+    tag: v1.4.1
 
 
 required-dependencies:
@@ -20,5 +20,7 @@ required-dependencies:
   - LibItems
 
 ignore:
-  - libs/BM-utils/tests
   - libs/LibStub/tests
+  - tests
+
+enable-nolib-creation: yes

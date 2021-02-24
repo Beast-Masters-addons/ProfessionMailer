@@ -5,15 +5,15 @@ addon.data = _G['ProfessionData']
 local profession = _G['CurrentProfession']
 local profession_api = _G['ProfessionAPI']
 local inventory = _G['LibInventory']
-local mail = _G['LibMail']
-local utils = _G['BMUtils1']
+local mail = _G['LibInventoryMail']
+local utils = _G['BMUtils']
 
 if LibStub then
     profession = LibStub("LibCurrentProfession-1.1")
     profession_api = LibStub("LibProfessionAPI-1.0")
     inventory = LibStub("LibInventory-0.1")
     mail = LibStub("LibMail-0.2")
-    utils = LibStub("BM-utils-1.0")
+    utils = LibStub("BM-utils-1")
 end
 
 local frame = CreateFrame("FRAME"); -- Need a frame to respond to events

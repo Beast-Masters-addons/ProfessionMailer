@@ -15,12 +15,12 @@
 #@no-lib-strip@
 libs\LibStub\LibStub.lua
 
-libs\LibItems\LibInventory.lua
-libs\LibItems\LibMail.lua
+libs\LibItems\addon\LibInventory.lua
+libs\LibItems\addon\mail.lua
 
-libs\LibProfessions\LibProfessions.lua
-libs\LibProfessions\ProfessionApi.lua
-libs\LibProfessions\CurrentProfession.lua
+libs\LibProfessions\addon\LibProfessions.lua
+libs\LibProfessions\addon\ProfessionApi.lua
+libs\LibProfessions\addon\CurrentProfession.lua
 
 libs\BM-utils\addon\utils.lua
 #@end-no-lib-strip@
