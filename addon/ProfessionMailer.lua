@@ -46,6 +46,10 @@ function addon:SaveReagents()
         return
     end
     for recipeID, recipe in pairs(recipes) do
+        if recipe['link'] == nil then
+            utils:printf('No link for %s', recipeID)
+            return
+        end
         --print('recipeID:', recipeID)
         craftItemId = utils:ItemIdFromLink(recipe['link'])
         recipes[recipeID]['craftItemId'] = craftItemId
