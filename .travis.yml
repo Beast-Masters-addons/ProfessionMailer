@@ -20,7 +20,7 @@ before_install:
   - sudo luarocks install luacheck
 
 before_script:
-  - /home/travis/.luarocks/bin/luacheck addon --no-color -q -g --no-self
+  - luacheck addon --no-color -q -g --no-self
 
 notifications:
   email:
