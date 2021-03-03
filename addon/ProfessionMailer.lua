@@ -257,24 +257,21 @@ end
 
 local PT = LibStub("LibPeriodicTable-3.1")
 
-SLASH_CLOTH1 = "/mailcloth"
-SlashCmdList["CLOTH"] = function()
-    addon:MailSet("Tradeskill.Mat.ByType.Cloth")
-    --for item, value, set in PT:IterateSet("Tradeskill.Mat.ByType.Cloth") do
-    --    print(item, value, set)
-    --end
-end
-
 SLASH_MATS1 = "/sendmats"
 SLASH_MATS2 = "/mats"
 SlashCmdList["MATS"] = function(msg)
-    if msg == "cloth" then
-        addon:MailSet("Tradeskill.Mat.ByType.Cloth")
-    elseif msg == "herb" then
-        addon:MailSet("Tradeskill.Mat.ByType.Herb")
-    else
-        utils:error("Invalid mats:", msg)
+    addon:MailMats(msg)
+end
+
+function addon:MailMats(type)
+    local set = "Tradeskill.Mat.ByType."..type:sub(1,1):upper()..type:sub(2)
+    local t = PT:GetSetTable(set)
+    if t == nil then
+        utils:error('Invalid material type: '..type)
+        return
     end
+
+    self:MailSet(set)
 end
 
 function addon:MailSet(set)
