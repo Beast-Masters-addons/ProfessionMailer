@@ -255,7 +255,7 @@ SlashCmdList["NEEDCLEAR"] = function()
 end
 
 
---local PT = LibStub("LibPeriodicTable-3.1")
+local PT = LibStub("LibPeriodicTable-3.1")
 
 SLASH_CLOTH1 = "/mailcloth"
 SlashCmdList["CLOTH"] = function()

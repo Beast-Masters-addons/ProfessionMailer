@@ -13,6 +13,10 @@ externals:
   libs/BM-utils:
     url: https://github.com/Beast-Masters-addons/BM-utils.git
     tag: v1.4.1
+  libs/LibPeriodicTable:
+    url: https://repos.curseforge.com/wow/libperiodictable-3-1/trunk/LibPeriodicTable-3.1
+  libs/LibPeriodicTable-Tradeskill:
+    url: https://repos.curseforge.com/wow/libperiodictable-3-1/trunk/LibPeriodicTable-3.1-Tradeskill
 
 
 required-dependencies:
