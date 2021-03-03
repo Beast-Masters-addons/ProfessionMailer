@@ -229,9 +229,7 @@ function addon:need_mail(character)
             utils:cprint(string.format('Adding item %d from bag %d slot %d as attachment %d',
                                         itemID, position["bag"], position["slot"], key))
             --@end-debug@
-            --TODO: Use mail:AddAttachment
-            PickupContainerItem(position["bag"], position["slot"])
-            ClickSendMailItemButton(key)
+            mail:AddAttachment(position["bag"], position["slot"], key)
             key = key +1
         end
     end
