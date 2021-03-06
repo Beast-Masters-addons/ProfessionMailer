@@ -2,16 +2,15 @@ local addon = {}
 _G['ProfessionMailer'] = addon
 addon.data = _G['ProfessionData']
 
-local professions = _G['LibProfessions']
 local profession = _G['CurrentProfession']
 local profession_api = _G['ProfessionAPI']
 local inventory = _G['LibInventory']
 local mail = _G['LibInventoryMail']
 local utils = _G['BMUtils']
+local NeedFrame = _G.NeedFrame --Frame defined in XML
 
 if _G['LibStub'] ~= nil then
-    local minor
-    professions, minor = _G.LibStub("LibProfessions-0", 9)
+    local professions, minor = _G.LibStub("LibProfessions-0", 9)
     if minor < 9 then
         error(('LibProfessions 0.9 or higher required, loaded %d'):format(minor))
     end
@@ -20,10 +19,10 @@ if _G['LibStub'] ~= nil then
     profession_api = professions.api
     inventory = _G.LibStub("LibInventory-0")
     mail = inventory.mail
-    utils = LibStub("BM-utils-1")
+    utils = _G.LibStub("BM-utils-1")
 end
 
-local frame = CreateFrame("FRAME"); -- Need a frame to respond to events
+local frame = _G.CreateFrame("FRAME"); -- Need a frame to respond to events
 frame:RegisterEvent("ADDON_LOADED"); -- Fired when saved variables are loaded
 
 local character_id = utils:GetCharacterString()
@@ -174,18 +173,18 @@ function addon:close_need_frame()
 end
 
 function addon:show_need_frame(character)
-    local close = CreateFrame("Button", "NeedCloseButton", NeedFrame, "UIPanelCloseButton")
+    local close = _G.CreateFrame("Button", "NeedCloseButton", NeedFrame, "UIPanelCloseButton")
     close:SetPoint("TOPRIGHT", -1, -1)
     close:SetScript("OnClick", addon.close_need_frame)
     NeedFrame:Show()
-    NeedText:SetText(addon:need_string_links(character))
-    HeaderText:SetText(string.format("Items needed by %s", character))
+    _G.NeedText:SetText(addon:need_string_links(character))
+    _G.HeaderText:SetText(string.format("Items needed by %s", character))
 end
 
-SLASH_NEEDED1 = "/needed"
-SLASH_NEEDED2 = "/need"
+_G.SLASH_NEEDED1 = "/needed"
+_G.SLASH_NEEDED2 = "/need"
 
-SlashCmdList["NEEDED"] = function(msg)
+_G.SlashCmdList["NEEDED"] = function(msg)
     local character = utils:GetCharacterString(msg)
     local links = addon:need_string_links(character)
     if not links then
@@ -198,7 +197,7 @@ end
 
 frame:SetScript("OnEvent", frame.OnEvent);
 
-GameTooltip:HookScript("OnTooltipSetItem", function(self)
+_G.GameTooltip:HookScript("OnTooltipSetItem", function(self)
     local _, link = self:GetItem()
     if not link then return end
     local id = utils:ItemIdFromLink(link)
@@ -219,7 +218,7 @@ function addon:needTooltip(itemID)
             character = need['character']
         end
 
-        GameTooltip:AddLine(string.format('%s: %s', character , need["name"]), color['r'], color['g'], color['b'])
+        _G.GameTooltip:AddLine(string.format('%s: %s', character, need["name"]), color['r'], color['g'], color['b'])
     end
 end
 
@@ -247,14 +246,14 @@ function addon:need_mail(character)
     mail:recipient(character)
 end
 
-SLASH_NEEDMAIL1 = "/needmail"
-SlashCmdList["NEEDMAIL"] = function(msg)
+_G.SLASH_NEEDMAIL1 = "/needmail"
+_G.SlashCmdList["NEEDMAIL"] = function(msg)
     local character = utils:GetCharacterString(msg)
     addon:need_mail(character)
 end
 
-SLASH_NEEDCLEAR1 = "/needclear"
-SlashCmdList["NEEDCLEAR"] = function()
+_G.SLASH_NEEDCLEAR1 = "/needclear"
+_G.SlashCmdList["NEEDCLEAR"] = function()
     _G['ItemRecipes'] = {}
     _G['CharacterDifficulty'] = {}
     _G['CharacterProfessions'] = {}
@@ -263,12 +262,11 @@ SlashCmdList["NEEDCLEAR"] = function()
     addon:cprint("Cleared all saved needs", 0, 255, 0)
 end
 
+local PT = _G.LibStub("LibPeriodicTable-3.1")
 
-local PT = LibStub("LibPeriodicTable-3.1")
-
-SLASH_MATS1 = "/sendmats"
-SLASH_MATS2 = "/mats"
-SlashCmdList["MATS"] = function(msg)
+_G.SLASH_MATS1 = "/sendmats"
+_G.SLASH_MATS2 = "/mats"
+_G.SlashCmdList["MATS"] = function(msg)
     addon:MailMats(msg)
 end
 
@@ -291,14 +289,14 @@ function addon:MailSet(set)
         if location then
             --print(string.format('item: %s bag: %s slot: %s', item, location["bag"], location["slot"]))
             --if mail.mail_open then
-            PickupContainerItem(location["bag"], location["slot"])
-            ClickSendMailItemButton()
+            _G.PickupContainerItem(location["bag"], location["slot"])
+            _G.ClickSendMailItemButton()
             --end
         end
     end
 end
 
-SLASH_SCANBAGS1 = "/scanbags"
-SlashCmdList["SCANBAGS"] = function()
+_G.SLASH_SCANBAGS1 = "/scanbags"
+_G.SlashCmdList["SCANBAGS"] = function()
     inventory:ScanAllBags()
 end
