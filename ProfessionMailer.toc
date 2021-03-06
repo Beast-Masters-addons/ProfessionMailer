@@ -2,9 +2,9 @@
 ## Interface: 90002
 #@end-retail@
 #@non-retail@
-# ## Interface: 11305
+# ## Interface: 11306
 #@end-non-retail@
-## Version: 0.4
+## Version: @project-version@
 ## Author: datagutten
 ## Title: ProfessionMailer
 ## Notes: Send materials to the character who needs them
