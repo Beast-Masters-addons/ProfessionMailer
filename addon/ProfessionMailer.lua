@@ -11,8 +11,8 @@ local utils = _G['BMUtils']
 if LibStub then
     profession = LibStub("LibCurrentProfession-1.1")
     profession_api = LibStub("LibProfessionAPI-1.0")
-    inventory = LibStub("LibInventory-0.1")
-    mail = LibStub("LibMail-0.2")
+    inventory = LibStub("LibInventory-0")
+    mail = inventory.mail
     utils = LibStub("BM-utils-1")
 end
 
