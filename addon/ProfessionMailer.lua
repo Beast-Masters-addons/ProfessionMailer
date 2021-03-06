@@ -2,16 +2,23 @@ local addon = {}
 _G['ProfessionMailer'] = addon
 addon.data = _G['ProfessionData']
 
+local professions = _G['LibProfessions']
 local profession = _G['CurrentProfession']
 local profession_api = _G['ProfessionAPI']
 local inventory = _G['LibInventory']
 local mail = _G['LibInventoryMail']
 local utils = _G['BMUtils']
 
-if LibStub then
-    profession = LibStub("LibCurrentProfession-1.1")
-    profession_api = LibStub("LibProfessionAPI-1.0")
-    inventory = LibStub("LibInventory-0")
+if _G['LibStub'] ~= nil then
+    local minor
+    professions, minor = _G.LibStub("LibProfessions-0", 9)
+    if minor < 9 then
+        error(('LibProfessions 0.9 or higher required, loaded %d'):format(minor))
+    end
+
+    profession = professions.current
+    profession_api = professions.api
+    inventory = _G.LibStub("LibInventory-0")
     mail = inventory.mail
     utils = LibStub("BM-utils-1")
 end

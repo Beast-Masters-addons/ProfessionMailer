@@ -25,9 +25,9 @@ libs\LibPeriodicTable-Tradeskill\LibPeriodicTable-3.1-Tradeskill.lua
 libs\LibItems\addon\LibInventory.lua
 libs\LibItems\addon\mail.lua
 
-libs\LibProfessions\addon\LibProfessions.lua
 libs\LibProfessions\addon\ProfessionApi.lua
 libs\LibProfessions\addon\CurrentProfession.lua
+libs\LibProfessions\addon\LibProfessions.lua
 
 libs\BM-utils\addon\utils.lua
 #@end-no-lib-strip@
