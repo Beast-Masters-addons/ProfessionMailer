@@ -1,5 +1,6 @@
 _G['ProfessionMailer-@project-version@'] = {}
 local addon = _G['ProfessionMailer-@project-version@']
+_G['ProfessionMailer'] = _G['ProfessionMailer-@project-version@']
 
 addon.data = _G['ProfessionData']
 local common = _G['ProfessionMailerCommon-@project-version@']
