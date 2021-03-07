@@ -4,11 +4,21 @@ jobs:
   include:
     - name: 'Retail'
       install:
+        - curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -d -z
+        - git clone https://github.com/Gethe/wow-ui-source tests/wow-ui-source
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
+        - cd $TRAVIS_BUILD_DIR
         - curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash
 
     - name: 'Classic'
       install:
         - export CLASSIC_VERSION="1.13.6"
+        - curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -d -z -g $CLASSIC_VERSION
+        - git clone https://github.com/Gethe/wow-ui-source tests/wow-ui-source -b classic
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
+        - cd $TRAVIS_BUILD_DIR
         - curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -g $CLASSIC_VERSION
 
 addons:
@@ -18,11 +28,14 @@ addons:
 
 before_install:
   - sudo luarocks install luacheck
+  - sudo luarocks install luaunit
+  - sudo luarocks install luacov
 
 before_script:
-  - luacheck addon --no-color -q --no-self
+  - cp -r tests .release/ProfessionMailer
+  - cd .release/ProfessionMailer
 
-notifications:
-  email:
-    on_success: never
-    on_failure: always
+script:
+  - luacheck addon --no-color -q --no-self
+  - cd tests
+  - lua -lluacov test_LibProfessions.lua
