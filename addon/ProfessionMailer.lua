@@ -1,26 +1,16 @@
-local addon = {}
-_G['ProfessionMailer'] = addon
+_G['ProfessionMailer-@project-version@'] = {}
+local addon = _G['ProfessionMailer-@project-version@']
+
 addon.data = _G['ProfessionData']
+local common = _G['ProfessionMailerCommon-@project-version@']
+local professions = common.professions
 
-local profession = _G['CurrentProfession']
-local profession_api = _G['ProfessionAPI']
-local inventory = _G['LibInventory']
-local mail = _G['LibInventoryMail']
-local utils = _G['BMUtils']
+local inventory = common.inventory
+local mail = common.inventory.mail
+local utils = common.utils
+local PT = common.PT
+
 local NeedFrame = _G.NeedFrame --Frame defined in XML
-
-if _G['LibStub'] ~= nil then
-    local professions, minor = _G.LibStub("LibProfessions-0", 9)
-    if minor < 9 then
-        error(('LibProfessions 0.9 or higher required, loaded %d'):format(minor))
-    end
-
-    profession = professions.current
-    profession_api = professions.api
-    inventory = _G.LibStub("LibInventory-0")
-    mail = inventory.mail
-    utils = _G.LibStub("BM-utils-1")
-end
 
 local frame = _G.CreateFrame("FRAME"); -- Need a frame to respond to events
 frame:RegisterEvent("ADDON_LOADED"); -- Fired when saved variables are loaded
@@ -37,7 +27,7 @@ end
 
 --/dump ProfessionMailer:SaveReagents()
 function addon:SaveReagents()
-    local professionName, rank, maxRank = profession_api:GetInfo()
+    local professionName, rank, maxRank = professions.api:GetInfo()
     local craftItemId
     if professionName == 'UNKNOWN' then
         return
@@ -46,7 +36,7 @@ function addon:SaveReagents()
     utils:cprint("Saving reagents for " .. professionName)
     --@end-debug@
 
-    local recipes = profession:GetRecipes()
+    local recipes = professions.current:GetRecipes()
     if not recipes or recipes == {} then
         utils:error('No recipes found, close and reopen the profession window')
         return
@@ -60,7 +50,7 @@ function addon:SaveReagents()
         craftItemId = utils:ItemIdFromLink(recipe['link'])
         recipes[recipeID]['craftItemId'] = craftItemId
         --ItemRecipes
-        local reagents = profession:GetReagents(recipeID)
+        local reagents = professions.current:GetReagents(recipeID)
         _G['RecipeReagents'][craftItemId] = reagents
 
         for _, reagent in pairs(reagents) do
@@ -106,7 +96,7 @@ function frame:OnEvent(event, arg1)
         else
             frame:RegisterEvent("TRADE_SKILL_LIST_UPDATE")
         end
-    elseif event == "TRADE_SKILL_LIST_UPDATE" or event == "TRADE_SKILL_UPDATE" and profession_api:IsReady() then
+    elseif event == "TRADE_SKILL_LIST_UPDATE" or event == "TRADE_SKILL_UPDATE" and professions.api:IsReady() then
         addon:SaveReagents()
         --Unregister events after saving
         if utils:IsWoWClassic() then
@@ -246,30 +236,6 @@ function addon:need_mail(character)
     mail:recipient(character)
 end
 
-_G.SLASH_NEEDMAIL1 = "/needmail"
-_G.SlashCmdList["NEEDMAIL"] = function(msg)
-    local character = utils:GetCharacterString(msg)
-    addon:need_mail(character)
-end
-
-_G.SLASH_NEEDCLEAR1 = "/needclear"
-_G.SlashCmdList["NEEDCLEAR"] = function()
-    _G['ItemRecipes'] = {}
-    _G['CharacterDifficulty'] = {}
-    _G['CharacterProfessions'] = {}
-    _G['RecipeReagents'] = {}
-    addon:init_variables()
-    addon:cprint("Cleared all saved needs", 0, 255, 0)
-end
-
-local PT = _G.LibStub("LibPeriodicTable-3.1")
-
-_G.SLASH_MATS1 = "/sendmats"
-_G.SLASH_MATS2 = "/mats"
-_G.SlashCmdList["MATS"] = function(msg)
-    addon:MailMats(msg)
-end
-
 function addon:MailMats(type)
     local set = "Tradeskill.Mat.ByType."..type:sub(1,1):upper()..type:sub(2)
     local t = PT:GetSetTable(set)
@@ -296,7 +262,3 @@ function addon:MailSet(set)
     end
 end
 
-_G.SLASH_SCANBAGS1 = "/scanbags"
-_G.SlashCmdList["SCANBAGS"] = function()
-    inventory:ScanAllBags()
-end
