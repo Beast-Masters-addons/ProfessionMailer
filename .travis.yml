@@ -37,4 +37,5 @@ script:
   - luacheck addon --no-color -q --no-self
   - cd tests
   - lua -lluacov test_ProfessionData.lua
+  - lua -lluacov test_ProfessionMailer.lua
   - bash <(curl -s https://codecov.io/bash)
