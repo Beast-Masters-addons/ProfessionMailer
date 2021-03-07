@@ -1,8 +1,8 @@
 ---Handle saved profession data
 _G['ProfessionData'] = {}
 local lib =_G['ProfessionData']
-local common = _G['ProfessionMailerCommon-@project-version@']
-local utils = common.utils
+--local common = _G['ProfessionMailerCommon-@project-version@']
+--local utils = common.utils
 
 --- Initialize a table as a global variable
 --- @param name string Global variable name
@@ -37,7 +37,7 @@ end
 function lib:whoNeeds(itemID)
 	local crafts = self:ItemUsedFor(itemID)
 	if not crafts then
-		print('No known usages of item ' .. itemID)
+		--print('No known usages of item ' .. itemID)
 		return
 	end
 	local difficulty
@@ -47,7 +47,7 @@ function lib:whoNeeds(itemID)
 		for character, difficulties in pairs(_G['CharacterDifficulty']) do
 			difficulty = difficulties[craftedItemId]
 			if difficulty then
-				print(utils:sprintf('%s can use %s to craft %s with difficulty %s', character, itemID, craft['name'], difficulty))
+				--print(utils:sprintf('%s can use %s to craft %s with difficulty %s', character, itemID, craft['name'], difficulty))
 				table.insert(crafted, {
 					name = craft['name'], --Crafted item name
 					craftedItemId = craft['itemID'],
