@@ -11,7 +11,6 @@ if os.getenv('CLASSIC_VERSION') ~= nil then
     function _G.GetBuildInfo()
         return "1.13.2", 32600, "Nov 20 2019", 11302
     end
-    loadfile('profession_api_classic.lua')()
 else
     print('Running tests for WoW Retail')
     function _G.GetBuildInfo()
