@@ -10,12 +10,23 @@ _G['test'] = {}
 local test = _G['test']
 local ProfessionData =_G['ProfessionData']
 
+function test:testInitTable()
+	lu.assertNil(_G['test_table'])
+	ProfessionData:init_table('test_table', 'test2')
+	lu.assertNotNil(_G['test_table'])
+end
+
 function test:testItemUsedFor()
 	local usages = ProfessionData:ItemUsedFor(118)
 	lu.assertEquals(usages,  {[858] = {
 		["name"] = "Lesser Healing Potion",
 		["itemID"] = 858,
 	}})
+end
+
+function test:testDifficulty()
+	local difficulty = ProfessionData.RecipeDifficulty('Quadbear-Mirage Raceway', 733)
+	lu.assertEquals('optimal', difficulty)
 end
 
 function test:testWhoNeeds()

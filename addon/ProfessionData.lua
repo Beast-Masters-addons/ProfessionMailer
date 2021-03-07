@@ -27,7 +27,7 @@ end
 --- @param character string Character name and realm
 --- @param craftedItemId number Item ID of the crafted item
 --- @return string Difficulty name (trivial, optimal, etc)
-function lib:RecipeDifficulty(_, character, craftedItemId)
+function lib.RecipeDifficulty(character, craftedItemId)
 	return _G['CharacterDifficulty'][character][craftedItemId]
 end
 
