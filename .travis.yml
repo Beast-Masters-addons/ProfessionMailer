@@ -38,4 +38,4 @@ before_script:
 script:
   - luacheck addon --no-color -q --no-self
   - cd tests
-  - lua -lluacov test_LibProfessions.lua
+  - lua -lluacov test_ProfessionData.lua
