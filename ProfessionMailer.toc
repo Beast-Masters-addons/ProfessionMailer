@@ -22,12 +22,14 @@ libs\LibStub\LibStub.lua
 libs\LibPeriodicTable\LibPeriodicTable-3.1.lua
 libs\LibPeriodicTable-Tradeskill\LibPeriodicTable-3.1-Tradeskill.lua
 
+libs\BM-utils\addon\version.lua
+libs\BM-utils\addon\utils.lua
+
 libs\LibItems\addon\LibInventory.lua
 libs\LibItems\addon\mail.lua
 
 libs\LibProfessions\lib.xml
 
-libs\BM-utils\addon\utils.lua
 #@end-no-lib-strip@
 addon\ProfessionData.lua
 
