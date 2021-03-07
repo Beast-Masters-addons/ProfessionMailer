@@ -44,7 +44,7 @@ function addon:SaveReagents()
     end
     for recipeID, recipe in pairs(recipes) do
         if recipe['link'] == nil then
-            utils:printf('No link for %s', recipeID)
+            utils:error(utils:sprintf('No link for recipe %s', recipeID))
             return
         end
         --print('recipeID:', recipeID)
