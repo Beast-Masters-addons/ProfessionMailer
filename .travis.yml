@@ -7,7 +7,6 @@ jobs:
         - curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -d -z
         - git clone https://github.com/Gethe/wow-ui-source tests/wow-ui-source
       after_success:
-        - bash <(curl -s https://codecov.io/bash)
         - cd $TRAVIS_BUILD_DIR
         - curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash
 
@@ -17,7 +16,6 @@ jobs:
         - curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -d -z -g $CLASSIC_VERSION
         - git clone https://github.com/Gethe/wow-ui-source tests/wow-ui-source -b classic
       after_success:
-        - bash <(curl -s https://codecov.io/bash)
         - cd $TRAVIS_BUILD_DIR
         - curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -g $CLASSIC_VERSION
 
@@ -39,3 +37,4 @@ script:
   - luacheck addon --no-color -q --no-self
   - cd tests
   - lua -lluacov test_ProfessionData.lua
+  - bash <(curl -s https://codecov.io/bash)
