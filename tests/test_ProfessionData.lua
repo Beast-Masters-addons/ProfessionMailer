@@ -1,12 +1,10 @@
 local lu = require('luaunit')
 
-
 loadfile('test_data2.lua')()
 loadfile('wow_functions.lua')()
-loadfile('../libs/BM-utils/addon/version.lua')()
-loadfile('../libs/BM-utils/addon/utils.lua')()
-loadfile('../addon/ProfessionData.lua')()
 
+loadfile('frame.lua')()
+loadfile('load_toc.lua')('../ProfessionMailer.toc')
 
 _G['test'] = {}
 local test = _G['test']
