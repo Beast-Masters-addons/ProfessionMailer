@@ -1,11 +1,5 @@
 local lu = require('luaunit')
 
-loadfile('wow_functions.lua')()
-
-loadfile('frame.lua')()
-loadfile('load_toc.lua')('../ProfessionMailer.toc')
-loadfile('profession_api.lua')()
-
 if os.getenv('CLASSIC_VERSION') ~= nil then
     print('Running tests for WoW Classic')
     function _G.GetBuildInfo()
@@ -17,6 +11,12 @@ else
         return "9.0.2", 37474, "Feb 3 2021", 90002
     end
 end
+
+loadfile('wow_functions.lua')()
+loadfile('frame.lua')()
+
+loadfile('load_toc.lua')('../ProfessionMailer.toc')
+loadfile('profession_api.lua')()
 
 _G['test'] = {}
 local test = _G['test']
