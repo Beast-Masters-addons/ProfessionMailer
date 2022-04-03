@@ -6,8 +6,9 @@ addon.data = _G['ProfessionData']
 local common = _G['ProfessionMailerCommon-@project-version@']
 local professions = common.professions
 
-local inventory = common.inventory
-local mail = common.inventory.mail
+---@type LibInventory
+local inventory = _G.LibStub('LibInventory-0')
+local mail = inventory.mail
 local utils = common.utils
 local PT = common.PT
 

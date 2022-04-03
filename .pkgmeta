@@ -4,9 +4,6 @@ externals:
   libs/LibStub:
     url: https://repos.wowace.com/wow/libstub/trunk
     tag: latest
-  libs/LibItems:
-    url: https://github.com/datagutten/wow-LibItems.git
-    tag: v0.5
   libs/LibProfessions:
     url: https://github.com/datagutten/wow-LibProfessions.git
     tag: v0.9.2

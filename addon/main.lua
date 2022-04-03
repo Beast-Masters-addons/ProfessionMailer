@@ -1,12 +1,7 @@
 local common = _G['ProfessionMailerCommon-@project-version@']
 local addon = _G['ProfessionMailer-@project-version@']
-local inventory = common.inventory
 local utils = common.utils
 
-_G.SLASH_SCANBAGS1 = "/scanbags"
-_G.SlashCmdList["SCANBAGS"] = function()
-    inventory:ScanAllBags()
-end
 
 _G.SLASH_NEEDMAIL1 = "/needmail"
 _G.SlashCmdList["NEEDMAIL"] = function(msg)

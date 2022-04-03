@@ -10,6 +10,7 @@
 ## Notes: Send materials to the character who needs them
 ## SavedVariables: ItemRecipes, CharacterDifficulty, CharacterProfessions, RecipeReagents
 ## X-Curse-Project-ID: 342943
+## Dependencies: LibInventory
 
 #@non-no-lib-strip@
 # ## Dependencies: BM-utils, LibItems, LibProfessions, LibPeriodicTable-3.1
@@ -24,9 +25,6 @@ libs\LibPeriodicTable-Tradeskill\LibPeriodicTable-3.1-Tradeskill.lua
 
 libs\BM-utils\addon\version.lua
 libs\BM-utils\addon\utils.lua
-
-libs\LibItems\addon\LibInventory.lua
-libs\LibItems\addon\mail.lua
 
 libs\LibProfessions\lib.xml
 
