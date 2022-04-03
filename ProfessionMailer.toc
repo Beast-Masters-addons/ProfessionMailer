@@ -10,24 +10,12 @@
 ## Dependencies: LibInventory
 
 #@non-no-lib-strip@
-# ## Dependencies: BM-utils, LibItems, LibProfessions, LibPeriodicTable-3.1
+# ## Dependencies: BM-utils, LibProfessions, LibPeriodicTable-3.1
 #@end-non-no-lib-strip@
 
 #@no-lib-strip@
 ## OptionalDeps: LibPeriodicTable-3.1, BM-utils
-libs\LibStub\LibStub.lua
 
-libs\LibPeriodicTable\LibPeriodicTable-3.1.lua
-libs\LibPeriodicTable-Tradeskill\LibPeriodicTable-3.1-Tradeskill.lua
-
-libs\BM-utils\addon\version.lua
-libs\BM-utils\addon\utils.lua
-
-libs\LibProfessions\lib.xml
-
+libs.xml
 #@end-no-lib-strip@
-addon\common.lua
-addon\ProfessionData.lua
-addon\ProfessionMailer.lua
-addon\ProfessionMailer.xml
-addon\main.lua
+addon.xml
