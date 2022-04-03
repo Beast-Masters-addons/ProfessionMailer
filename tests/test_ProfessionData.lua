@@ -3,8 +3,13 @@ local lu = require('luaunit')
 loadfile('test_data2.lua')()
 loadfile('wow_functions.lua')()
 
-loadfile('frame.lua')()
-loadfile('load_toc.lua')('../ProfessionMailer.toc')
+loadfile('build_utils/wow_api/frame.lua')()
+
+loadfile('../libs/BM-utils/addon/version.lua')()
+loadfile('build_utils/utils/load_toc.lua')('../ProfessionMailer.toc', {'ProfessionMailer.lua'})
+loadfile('build_utils/utils/load_toc.lua')('LibInventory/LibInventory.toc', {'LibStub.lua'})
+loadfile('build_utils/utils/load_toc.lua')('../ProfessionMailer.toc')
+
 
 _G['test'] = {}
 local test = _G['test']

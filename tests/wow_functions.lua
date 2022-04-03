@@ -45,3 +45,9 @@ _G['gsub'] = string.gsub
 
 SlashCmdList = {}
 
+_G.GameTooltip = {}
+
+function _G.GameTooltip:HookScript (...)
+
+end
+

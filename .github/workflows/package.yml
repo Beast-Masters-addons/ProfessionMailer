@@ -34,6 +34,12 @@ jobs:
           repository: Beast-Masters-addons/build_utils
           path: tests/build_utils
 
+      - name: Get LibInventory
+        uses: actions/checkout@v3
+        with:
+          repository: Beast-Masters-addons/LibInventory
+          path: tests/LibInventory
+
       - name: Install lua dependencies
         run: |
           sudo apt-get update
@@ -54,18 +60,6 @@ jobs:
         run: |
           mv .release/ProfessionMailer/libs .
           mv .release/ProfessionMailer/ProfessionMailer.toc .
-
-      - name: Download profession API dummy classic
-        if: matrix.game_version == 'classic'
-        run: wget -O tests/profession_api.lua https://raw.githubusercontent.com/Beast-Masters-addons/LibProfessions/master/tests/profession_api_classic.lua
-
-      - name: Download profession API dummy bcc
-        if: matrix.game_version == 'bcc'
-        run: wget -O tests/profession_api.lua https://raw.githubusercontent.com/Beast-Masters-addons/LibProfessions/master/tests/profession_api_classic.lua
-
-      - name: Download profession API dummy retail
-        if: matrix.game_version == 'retail'
-        run: wget -O tests/profession_api.lua https://raw.githubusercontent.com/Beast-Masters-addons/LibProfessions/master/tests/profession_api_retail.lua
 
       - name: Run tests
         working-directory: ./tests
