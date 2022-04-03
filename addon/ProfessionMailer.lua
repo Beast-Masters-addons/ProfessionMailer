@@ -1,16 +1,14 @@
-_G['ProfessionMailer-@project-version@'] = {}
-local addon = _G['ProfessionMailer-@project-version@']
-_G['ProfessionMailer'] = _G['ProfessionMailer-@project-version@']
+---@type ProfessionMailer
+local _, addon = ...
 
 addon.data = _G['ProfessionData']
-local common = _G['ProfessionMailerCommon-@project-version@']
-local professions = common.professions
+local professions = addon.professions
 
 ---@type LibInventory
 local inventory = _G.LibStub('LibInventory-0')
 local mail = inventory.mail
-local utils = common.utils
-local PT = common.PT
+local utils = addon.utils
+local PT = addon.PT
 
 local NeedFrame = _G.NeedFrame --Frame defined in XML
 

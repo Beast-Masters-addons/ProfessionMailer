@@ -1,19 +1,23 @@
-_G['ProfessionMailerCommon-@project-version@'] = {}
-local common = _G['ProfessionMailerCommon-@project-version@']
+---@class ProfessionMailer
+local addonName, addon = ...
+addon.name = addonName
+addon.version = '@project-version@'
 
-common.version = '@project-version@'
+---@type BMUtils
+addon.utils = _G.LibStub('BM-utils-1')
 
-common.utils = _G['BMUtils']
-common.utils = _G.LibStub("BM-utils-1")
-
-common.professions = _G['LibProfessions']
 local minor
-common.professions, minor = _G.LibStub("LibProfessions-0", 9)
-assert(minor >= 9, common.utils:sprintf('LibProfessions 0.9 or higher required, loaded %d', minor))
-common.professions.current = common.professions.currentProfession
+---@type LibProfessionsCommon
+addon.professions, minor = _G.LibStub("LibProfessions-0")
+assert(minor >= 10, addon.utils:sprintf('LibProfessions 0.10 or higher required, loaded %d', minor))
 
-assert(common.professions.api, 'Error loading LibProfessionsAPI')
+---Deprecated, use addon.professions.currentProfession
+addon.professions.current = addon.professions.currentProfession
 
-common.is_classic = common.utils:IsWoWClassic()
+assert(addon.professions.api, 'Error loading LibProfessionsAPI')
 
-common.PT = _G.LibStub("LibPeriodicTable-3.1")
+addon.is_classic = addon.utils:IsWoWClassic()
+
+addon.PT = _G.LibStub("LibPeriodicTable-3.1")
+
+_G['ProfessionMailer'] = addon

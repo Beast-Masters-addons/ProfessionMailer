@@ -1,7 +1,6 @@
-local common = _G['ProfessionMailerCommon-@project-version@']
-local addon = _G['ProfessionMailer-@project-version@']
-local utils = common.utils
-
+---@type ProfessionMailer
+local _, addon = ...
+local utils = addon.utils
 
 _G.SLASH_NEEDMAIL1 = "/needmail"
 _G.SlashCmdList["NEEDMAIL"] = function(msg)
