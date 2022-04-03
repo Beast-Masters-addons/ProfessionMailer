@@ -1,0 +1,108 @@
+name: Test and package
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+    tags:
+      - '**'
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        game_version: [ 'classic', 'bcc', 'retail' ]
+
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Get build utils
+        uses: actions/checkout@v3
+        with:
+          repository: Beast-Masters-addons/build_utils
+          path: tests/build_utils
+
+      - name: Install lua dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install luarocks
+          sudo luarocks install luaunit
+          sudo luarocks install luacov
+          sudo luarocks install luacheck
+
+      - name: Run luacheck
+        run: luacheck addon --no-self
+
+      - name: Build the addon
+        uses: BigWigsMods/packager@v2.0.3
+        with:
+          args: -g ${{ matrix.game_version }} -z -d
+
+      - name: Move libraries and compiled metadata files
+        run: |
+          mv .release/ProfessionMailer/libs .
+          mv .release/ProfessionMailer/ProfessionMailer.toc .
+
+      - name: Download profession API dummy classic
+        if: matrix.game_version == 'classic'
+        run: wget -O tests/profession_api.lua https://raw.githubusercontent.com/Beast-Masters-addons/LibProfessions/master/tests/profession_api_classic.lua
+
+      - name: Download profession API dummy bcc
+        if: matrix.game_version == 'bcc'
+        run: wget -O tests/profession_api.lua https://raw.githubusercontent.com/Beast-Masters-addons/LibProfessions/master/tests/profession_api_classic.lua
+
+      - name: Download profession API dummy retail
+        if: matrix.game_version == 'retail'
+        run: wget -O tests/profession_api.lua https://raw.githubusercontent.com/Beast-Masters-addons/LibProfessions/master/tests/profession_api_retail.lua
+
+      - name: Run tests
+        working-directory: ./tests
+        run: |
+          lua -lluacov test_ProfessionData.lua
+          lua -lluacov test_ProfessionMailer.lua
+        env:
+          GAME_VERSION: ${{ matrix.game_version }}
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        game_version: [ 'classic', 'bcc', 'retail' ]
+
+    needs:
+      - test
+
+    env:
+      CF_API_KEY: ${{ secrets.CF_API_KEY }}
+      WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+      WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: WoW Packager
+        uses: BigWigsMods/packager@v2.0.3
+        with:
+          args: -g ${{ matrix.game_version }}
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.game_version }}
+          path: .release
