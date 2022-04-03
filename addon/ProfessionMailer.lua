@@ -70,8 +70,8 @@ function addon:SaveReagents()
                 if not _G['ItemRecipes'][reagentItemID][craftItemId] then
                     _G['ItemRecipes'][reagentItemID][craftItemId] = {name = recipe['name'],
                                                                      itemID = craftItemId}
-                    _G['CharacterDifficulty'][character_id][craftItemId] = recipe['difficulty']
                 end
+                _G['CharacterDifficulty'][character_id][craftItemId] = recipe['difficulty']
             end
         end
     end
