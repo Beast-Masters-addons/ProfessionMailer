@@ -1,10 +1,16 @@
 local lu = require('luaunit')
 
 loadfile('wow_functions.lua')()
-loadfile('frame.lua')()
+loadfile('build_utils/wow_api/constants.lua')()
+loadfile('build_utils/wow_api/functions.lua')()
+loadfile('build_utils/wow_api/frame.lua')()
+if _G.WOW_PROJECT_ID == _G.WOW_PROJECT_MAINLINE then
+    loadfile('build_utils/wow_api/profession_api.lua_retail')()
+else
+    loadfile('build_utils/wow_api/profession_api_classic.lua')()
+end
 
-loadfile('load_toc.lua')('../ProfessionMailer.toc')
-loadfile('profession_api.lua')()
+loadfile('build_utils/utils/load_toc.lua')('resolved.toc')
 
 _G['test'] = {}
 local test = _G['test']

@@ -1,0 +1,5 @@
+## Title: Loading order for tests
+
+libs.xml
+libs\LibInventory\lib.xml
+addon.xml

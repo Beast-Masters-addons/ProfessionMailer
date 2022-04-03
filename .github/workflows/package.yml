@@ -34,12 +34,6 @@ jobs:
           repository: Beast-Masters-addons/build_utils
           path: tests/build_utils
 
-      - name: Get LibInventory
-        uses: actions/checkout@v3
-        with:
-          repository: Beast-Masters-addons/LibInventory
-          path: tests/LibInventory
-
       - name: Install lua dependencies
         run: |
           sudo apt-get update
@@ -60,6 +54,15 @@ jobs:
         run: |
           mv .release/ProfessionMailer/libs .
           mv .release/ProfessionMailer/ProfessionMailer.toc .
+
+      - name: Get LibInventory
+        uses: actions/checkout@v3
+        with:
+          repository: Beast-Masters-addons/LibInventory
+          path: libs/LibInventory
+
+      - name: Resolve dependencies
+        run: python build_utils/utils/parse_toc.py ProfessionMailer_test.toc
 
       - name: Run tests
         working-directory: ./tests
