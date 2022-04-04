@@ -23,7 +23,7 @@ function _G.UnitGUID()
 end
 
 function GetRealmName()
-    return "MirageRaceway"
+    return "Mirage Raceway"
 end
 
 function _G.GetNumAddOns()
