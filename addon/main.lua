@@ -41,3 +41,13 @@ _G.SLASH_MATS2 = "/mats"
 _G.SlashCmdList["MATS"] = function(msg)
     addon:MailMats(msg)
 end
+
+--/sendset Tradeskill.Gather.GemsInNodes.Tin Vein
+_G.SLASH_SEND_SET1 = "/sendset"
+_G.SlashCmdList['SEND_SET'] = function(msg)
+    if msg == '' then
+        addon.utils:error('Usage: /sendset [set name]')
+        return
+    end
+    addon:MailSet(msg)
+end
