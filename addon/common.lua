@@ -17,6 +17,7 @@ addon.professions.current = addon.professions.currentProfession
 assert(addon.professions.api, 'Error loading LibProfessionsAPI')
 
 addon.is_classic = addon.utils:IsWoWClassic()
+addon.character, addon.realm = addon.utils:GetCharacterInfo()
 
 addon.PT = _G.LibStub("LibPeriodicTable-3.1")
 
