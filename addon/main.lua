@@ -18,6 +18,10 @@ end
 
 _G.SLASH_NEEDMAIL1 = "/needmail"
 _G.SlashCmdList["NEEDMAIL"] = function(msg)
+    if msg == '' then
+        addon.utils:error('Usage: /needmail [character name]')
+        return
+    end
     local character = utils:GetCharacterString(msg)
     addon:need_mail(character)
 end
