@@ -5,7 +5,9 @@ addon.data = _G['ProfessionData']
 local professions = addon.professions
 
 ---@type LibInventory
-local inventory = _G.LibStub('LibInventory-0')
+local inventory, minor = _G.LibStub('LibInventory-0')
+---@type LibInventory
+addon.inventory = inventory
 local mail = inventory.mail
 local utils = addon.utils
 local PT = addon.PT
@@ -107,6 +109,40 @@ function frame:OnEvent(event, arg1)
     end
 end
 
+
+------ Find items in your bags that another character needs
+---@param character string Character with profession
+---@param realm_arg string Realm of the character with profession (set nil to use current realm)
+---@param difficulty number Minimum difficulty (do not send materials for grey recipes)
+---@param keep_limit number Number of items to keep in your inventory
+function addon:characterProfessionNeeds(character, realm_arg, difficulty, keep_limit)
+    if realm_arg == nil then
+        realm_arg = realm
+    end
+
+    local character_string = utils:GetCharacterString(character, realm_arg)
+    local reagents = {}
+    local items = inventory.main:getLocationItems('bags', self.character, self.realm)
+    for itemId, count in pairs(items) do
+        local needs = _G['ProfessionData']:whoNeeds(itemId)
+        if needs ~= nil then
+            for _, need in ipairs(needs) do
+                if need['character'] == character_string then
+                    local difficulty_num = utils:DifficultyToNum(need['difficulty'])
+                    if (difficulty == nil or difficulty_num >= difficulty) and (keep_limit == nil or count >= keep_limit) then
+                        --@debug@
+                        utils:printf('%s need %d for %s (%d), difficulty %d, has %d', need['character'],
+                                need['materialItemId'], need['name'], need['craftedItemId'], difficulty_num, count)
+                        --@end-debug@
+                        table.insert(reagents, need['materialItemId'], need['materialItemId'])
+                    end
+                end
+            end
+        end
+    end
+    return reagents
+end
+
 --/dump ProfessionMailer:characterNeeds("Quadduo-Mirage Raceway")
 --- Find items in you inventory that another character needs
 function addon:characterNeeds(character)
@@ -118,7 +154,8 @@ function addon:characterNeeds(character)
             craftedItemId = recipe['craftItemId']
             reagents = _G['RecipeReagents'][craftedItemId]
             for _, reagent in ipairs(reagents) do
-                item = inventory:FindItem(reagent['reagentItemID'])
+                item = inventory.main:getItemLocation(reagent['reagentItemID'], addon.character, addon.realm)
+
                 local difficulty = utils:DifficultyToNum(recipe["difficulty"])
                 utils:printf('%s need %s for %s', character, reagent['reagentItemID'], recipe['craftItemId'])
                 if item ~= nil and difficulty>1 then
@@ -213,23 +250,19 @@ function addon:needTooltip(itemID)
 end
 
 function addon:need_mail(character)
-    local needed_have = self:characterNeeds(character)
+    local needed_have = self:characterProfessionNeeds(character)
     utils:cprint('Send needed items to ' .. character)
-
-    if not needed_have then
-        return
-    end
 
     local stacks
     local key = 1
     for _, itemID in pairs(needed_have) do
-        stacks = inventory:FindItemStacks(itemID)
+        stacks = inventory.container:getLocation(itemID)
         for _, position in ipairs(stacks) do
             --@debug@
             utils:cprint(string.format('Adding item %d from bag %d slot %d as attachment %d',
-                                        itemID, position["bag"], position["slot"], key))
+                    itemID, position["container"], position["slot"], key))
             --@end-debug@
-            mail:AddAttachment(position["bag"], position["slot"], key)
+            mail:AddAttachment(position["container"], position["slot"], key)
             key = key +1
         end
     end
@@ -248,16 +281,18 @@ function addon:MailMats(type)
 end
 
 function addon:MailSet(set)
-    local location
-    print("Mail set", set)
+    local attachment_key = 1
     for item in PT:IterateSet(set) do
-        location = inventory:FindItem(item)
-        if location then
-            --print(string.format('item: %s bag: %s slot: %s', item, location["bag"], location["slot"]))
-            --if mail.mail_open then
-            _G.PickupContainerItem(location["bag"], location["slot"])
-            _G.ClickSendMailItemButton()
-            --end
+        local locations = inventory.container:getLocation(item)
+
+        if locations then
+            for _, location in ipairs(locations) do
+                --@debug@
+                utils:printf('Found item %d in container %d slot %d', item, location['container'], location['slot'])
+                --@end-debug@
+                mail:AddAttachment(location["container"], location["slot"], attachment_key)
+                attachment_key = attachment_key + 1
+            end
         end
     end
 end
