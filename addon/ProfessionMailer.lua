@@ -208,20 +208,6 @@ function addon:show_need_frame(character)
     _G.HeaderText:SetText(string.format("Items needed by %s", character))
 end
 
-_G.SLASH_NEEDED1 = "/needed"
-_G.SLASH_NEEDED2 = "/need"
-
-_G.SlashCmdList["NEEDED"] = function(msg)
-    local character = utils:GetCharacterString(msg)
-    local links = addon:need_string_links(character)
-    if not links then
-        utils:cprint(string.format("%s does not need anything", character), 255, 255 ,0)
-        return
-    end
-    utils:cprint(links)
-    addon:show_need_frame(character)
-end
-
 frame:SetScript("OnEvent", frame.OnEvent);
 
 _G.GameTooltip:HookScript("OnTooltipSetItem", function(self)
