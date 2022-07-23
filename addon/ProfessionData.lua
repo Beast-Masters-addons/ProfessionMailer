@@ -31,6 +31,17 @@ function lib.RecipeDifficulty(character, craftedItemId)
 	return _G['CharacterDifficulty'][character][craftedItemId]
 end
 
+--- Get the reagents needed to make an item
+--- @param craftedItemId number Item ID of the crafted item
+--- @return table Reagent item IDs
+function lib.RecipeReagents(craftedItemId)
+	local reagents = {}
+	for _, reagent in ipairs(_G['RecipeReagents'][craftedItemId]) do
+		table.insert(reagents, reagent['reagentItemID'])
+	end
+	return reagents
+end
+
 --- Who need an item for crafting?
 --- @param itemID number Item ID to check
 --- @return table
