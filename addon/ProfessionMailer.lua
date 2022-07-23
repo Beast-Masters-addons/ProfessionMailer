@@ -13,6 +13,8 @@ local utils = addon.utils
 local PT = addon.PT
 
 local NeedFrame = _G.NeedFrame --Frame defined in XML
+---Blizzard Item object (defined in Interface/FrameXML/ObjectAPI/Item.lua)
+local Item = _G.Item
 
 local frame = _G.CreateFrame("FRAME"); -- Need a frame to respond to events
 frame:RegisterEvent("ADDON_LOADED"); -- Fired when saved variables are loaded
@@ -148,20 +150,21 @@ end
 function addon:characterNeeds(character)
     local needed_have = {}
     local needs = {}
-    local craftedItemId, reagents, item
+    local craftedItemId, reagents, item, locations
     for professionName, professionInfo in pairs(_G['CharacterProfessions'][character]) do
         for _, recipe in pairs(professionInfo['recipes']) do
             craftedItemId = recipe['craftItemId']
             reagents = _G['RecipeReagents'][craftedItemId]
             for _, reagent in ipairs(reagents) do
-                item = inventory.main:getItemLocation(reagent['reagentItemID'], addon.character, addon.realm)
+                locations = inventory.main:getItemLocation(reagent['reagentItemID'], addon.character, addon.realm)
+                item = Item:CreateFromItemID(reagent['reagentItemID'])
 
                 local difficulty = utils:DifficultyToNum(recipe["difficulty"])
-                utils:printf('%s need %s for %s', character, reagent['reagentItemID'], recipe['craftItemId'])
-                if item ~= nil and difficulty>1 then
+                if next(locations) ~= nil and difficulty > 1 then
                     table.insert(needed_have, reagent['reagentItemID'])
                     table.insert(needs, {
                         item = item,
+                        locations = locations,
                         profession = professionName,
                         recipe = recipe,
                     })
@@ -171,7 +174,6 @@ function addon:characterNeeds(character)
     end
     return needed_have, needs
 end
-
 
 --- Build a string with needed item links
 function addon:need_string_links(character)
@@ -186,7 +188,7 @@ function addon:need_string_links(character)
         local color = utils:DifficultyColor(need["recipe"]["difficulty"], true)
         text = string.format(
                 '%s need %s for %s', character,
-                need["item"]["itemLink"],
+                need["item"]:GetItemLink(),
                 need["recipe"]["link"])
         text = color:WrapTextInColorCode(text)
 
