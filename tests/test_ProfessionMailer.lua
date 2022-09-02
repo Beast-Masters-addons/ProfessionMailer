@@ -5,12 +5,12 @@ loadfile('build_utils/wow_api/constants.lua')()
 loadfile('build_utils/wow_api/functions.lua')()
 loadfile('build_utils/wow_api/frame.lua')()
 if _G.WOW_PROJECT_ID == _G.WOW_PROJECT_MAINLINE then
-    loadfile('build_utils/wow_api/profession_api.lua_retail')()
+    loadfile('build_utils/wow_api/profession_api_retail.lua')()
 else
     loadfile('build_utils/wow_api/profession_api_classic.lua')()
 end
 
-loadfile('build_utils/utils/load_toc.lua')('resolved.toc')
+loadfile('build_utils/utils/load_toc.lua')('./resolved.toc')
 
 _G['test'] = {}
 local test = _G['test']
