@@ -5,7 +5,7 @@ addon.data = _G['ProfessionData']
 local professions = addon.professions
 
 ---@type LibInventory
-local inventory, minor = _G.LibStub('LibInventory-0')
+local inventory = _G.LibStub('LibInventory-0')
 ---@type LibInventory
 addon.inventory = inventory
 local mail = inventory.mail
@@ -131,7 +131,8 @@ function addon:characterProfessionNeeds(character, realm_arg, difficulty, keep_l
             for _, need in ipairs(needs) do
                 if need['character'] == character_string then
                     local difficulty_num = utils:DifficultyToNum(need['difficulty'])
-                    if (difficulty == nil or difficulty_num >= difficulty) and (keep_limit == nil or count >= keep_limit) then
+                    if (difficulty == nil or difficulty_num >= difficulty) and
+                            (keep_limit == nil or count >= keep_limit) then
                         --@debug@
                         utils:printf('%s need %d for %s (%d), difficulty %d, has %d', need['character'],
                                 need['materialItemId'], need['name'], need['craftedItemId'], difficulty_num, count)
