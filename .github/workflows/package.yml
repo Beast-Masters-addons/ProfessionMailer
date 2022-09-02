@@ -62,7 +62,8 @@ jobs:
           path: libs/LibInventory
 
       - name: Resolve dependencies
-        run: python tests/build_utils/utils/parse_toc.py ProfessionMailer_test.toc
+        working-directory: ./tests
+        run: python build_utils/utils/parse_toc.py ProfessionMailer_test.toc
 
       - name: Run tests
         working-directory: ./tests
