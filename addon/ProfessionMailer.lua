@@ -5,7 +5,7 @@ addon.data = _G['ProfessionData']
 local professions = addon.professions
 
 ---@type LibInventory
-local inventory = _G.LibStub('LibInventory-0')
+local inventory = _G['LibInventory']
 ---@type LibInventory
 addon.inventory = inventory
 local mail = inventory.mail
