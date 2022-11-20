@@ -4,6 +4,13 @@ _G.debugstack = debug.traceback
 _G.strmatch = string.match
 addon = {}
 C_Timer = {}
+
+if os.getenv('GAME_VERSION') == 'retail' then
+    loadfile('build_utils/wow_api/container.lua')()
+else
+    loadfile('build_utils/wow_api/container_classic.lua')()
+end
+
 function C_Timer:NewTicker(...)
 end
 
