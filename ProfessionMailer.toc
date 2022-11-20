@@ -9,6 +9,8 @@
 ## Notes: Send materials to the character who needs them
 ## SavedVariables: ItemRecipes, CharacterDifficulty, CharacterProfessions, RecipeReagents
 ## X-Curse-Project-ID: 342943
+## X-Wago-ID: VBNBoL6x
+
 ## Dependencies: LibInventory
 
 #@non-no-lib-strip@
