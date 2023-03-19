@@ -46,7 +46,7 @@ jobs:
         run: luacheck addon --no-self
 
       - name: Build the addon
-        uses: BigWigsMods/packager@v2.0.3
+        uses: BigWigsMods/packager@v2.1.0
         with:
           args: -g ${{ matrix.game_version }} -z -d
 
@@ -74,14 +74,10 @@ jobs:
           GAME_VERSION: ${{ matrix.game_version }}
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
 
   build:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        game_version: [ 'classic', 'bcc', 'retail' ]
 
     needs:
       - test
@@ -96,11 +92,11 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: WoW Packager
-        uses: BigWigsMods/packager@v2.0.3
+        uses: BigWigsMods/packager@v2.1.0
         with:
           args: -g ${{ matrix.game_version }}
 
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.game_version }}
+          name: ProfessionMailer
           path: .release
