@@ -1,5 +1,6 @@
 ## Title: Loading order for tests
 
 ..\libs.xml
+LibInventory\.release\LibInventory\libs\BM-utils\lib.xml
 LibInventory\.release\LibInventory\lib.xml
 ..\addon.xml
