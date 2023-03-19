@@ -64,8 +64,7 @@ jobs:
       - name: Build LibInventory
         uses: BigWigsMods/packager@v2.1.0
         with:
-          path: tests/LibInventory
-          args: -z -d
+          args: -z -d -g tests/LibInventory
 
       - name: Resolve dependencies
         working-directory: ./tests
