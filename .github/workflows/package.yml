@@ -70,6 +70,9 @@ jobs:
         working-directory: ./tests
         run: python build_utils/utils/parse_toc.py ProfessionMailer_test.toc
 
+      - name: Show toc
+        run: cat tests/resolved.toc
+
       - name: Run tests
         working-directory: ./tests
         run: |
