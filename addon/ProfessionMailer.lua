@@ -4,12 +4,16 @@ local _, addon = ...
 addon.data = _G['ProfessionData']
 local professions = addon.professions
 
----@type LibInventory
-local inventory = _G['LibInventory']
----@type LibInventory
+---@type LibInventoryAce
+local lib_inventory = _G.LibStub("AceAddon-3.0"):GetAddon('LibInventoryAce')
+---@type LibInventoryLocations
+local inventory = lib_inventory:GetModule('LibInventoryLocations')
+
+---@type LibInventoryLocations
 addon.inventory = inventory
-local mail = inventory.mail
-local utils = addon.utils
+local mail = lib_inventory:GetModule('LibInventoryMail')
+---@type BMUtils
+local utils = _G.LibStub('BM-utils-1')
 local PT = addon.PT
 
 local NeedFrame = _G.NeedFrame --Frame defined in XML
@@ -124,7 +128,7 @@ function addon:characterProfessionNeeds(character, realm_arg, difficulty, keep_l
 
     local character_string = utils:GetCharacterString(character, realm_arg)
     local reagents = {}
-    local items = inventory.main:getLocationItems('bags', self.character, self.realm)
+    local items = inventory:getLocationItems('bags')
     for itemId, count in pairs(items) do
         local needs = _G['ProfessionData']:whoNeeds(itemId)
         if needs ~= nil then
