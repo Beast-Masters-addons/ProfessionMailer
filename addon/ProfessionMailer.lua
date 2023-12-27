@@ -8,9 +8,14 @@ local professions = addon.professions
 local lib_inventory = _G.LibStub("AceAddon-3.0"):GetAddon('LibInventoryAce')
 ---@type LibInventoryLocations
 local inventory = lib_inventory:GetModule('LibInventoryLocations')
+---@type LibInventoryContainer
+local container = lib_inventory:GetModule('LibInventoryContainer')
+---@type LibInventoryCharacter
+local character_utils = lib_inventory:GetModule('LibInventoryCharacter')
 
 ---@type LibInventoryLocations
 addon.inventory = inventory
+---@type LibInventoryMail
 local mail = lib_inventory:GetModule('LibInventoryMail')
 ---@type BMUtils
 local utils = _G.LibStub('BM-utils-1')
@@ -249,13 +254,9 @@ function addon:need_mail(character)
     local stacks
     local key = 1
     for _, itemID in pairs(needed_have) do
-        stacks = inventory.container:getLocation(itemID)
+        stacks = container:getLocation(itemID)
         for _, position in ipairs(stacks) do
-            --@debug@
-            utils:cprint(string.format('Adding item %d from bag %d slot %d as attachment %d',
-                    itemID, position["container"], position["slot"], key))
-            --@end-debug@
-            mail:AddAttachment(position["container"], position["slot"], key)
+            mail:AddAttachment(position["container"], position["slot"])
             key = key +1
         end
     end
@@ -274,17 +275,18 @@ function addon:MailMats(type)
 end
 
 function addon:MailSet(set)
-    local attachment_key = 1
-    for item in PT:IterateSet(set) do
-        local locations = inventory.container:getLocation(item)
+    --@debug@
+    utils:cprint('Mailing set ' .. set, 0, 1, 0)
+    --@end-debug@
 
-        if locations then
-            for _, location in ipairs(locations) do
+    local itemCount, itemLocations = container:getMultiContainerItems(0, 4)
+    for item in PT:IterateSet(set) do
+        if itemCount[item] then
+            for _, location in ipairs(itemLocations[item]) do
                 --@debug@
                 utils:printf('Found item %d in container %d slot %d', item, location['container'], location['slot'])
                 --@end-debug@
-                mail:AddAttachment(location["container"], location["slot"], attachment_key)
-                attachment_key = attachment_key + 1
+                mail:AddAttachment(location["container"], location["slot"])
             end
         end
     end
