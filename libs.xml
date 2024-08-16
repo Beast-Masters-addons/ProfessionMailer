@@ -6,5 +6,6 @@
     <Script file="libs\LibPeriodicTable-Tradeskill\LibPeriodicTable-3.1-Tradeskill.lua"/>
     <Include file="libs\BM-utils\lib.xml"/>
     <Include file="libs\LibProfessions\lib.xml"/>
-    <Script file="libs\LibDataBroker\LibDatabroker-1.1.lua"/>
+    <Include file="libs\Ace3\CallbackHandler-1.0\CallbackHandler-1.0.xml"/>
+    <Script file="libs\LibDataBroker\LibDataBroker-1.1.lua"/>
 </Ui>
