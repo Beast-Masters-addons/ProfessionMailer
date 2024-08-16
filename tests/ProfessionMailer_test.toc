@@ -1,6 +1,10 @@
 ## Title: Loading order for tests
 
 ..\libs.xml
-LibInventory\.release\LibInventory\libs\BM-utils\lib.xml
-LibInventory\.release\LibInventory\lib.xml
+..\libs\BM-utils-2\lib.xml
+..\libs\Ace3\AceEvent-3.0\AceEvent-3.0.lua
+
+LibInventory\tests\constants.lua
+LibInventory\tests\MailFrame.lua
+LibInventory\lib.xml
 ..\addon.xml
