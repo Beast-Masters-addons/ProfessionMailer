@@ -12,10 +12,17 @@ externals:
   libs/BM-utils:
     url: https://github.com/Beast-Masters-addons/BM-utils.git
     tag: v1.7
+  libs/BM-utils-2:
+    url: https://github.com/Beast-Masters-addons/BM-utils.git
+    tag: v2.0-alpha2
   libs/LibPeriodicTable:
     url: https://repos.curseforge.com/wow/libperiodictable-3-1/trunk/LibPeriodicTable-3.1
   libs/LibPeriodicTable-Tradeskill:
     url: https://repos.curseforge.com/wow/libperiodictable-3-1/trunk/LibPeriodicTable-3.1-Tradeskill
+  libs/LibDataBroker:
+    url: https://github.com/tekkub/libdatabroker-1-1
+  libs/LibQTip-1.0:
+    url: https://repos.curseforge.com/wow/libqtip-1-0
 
 
 required-dependencies:
@@ -24,6 +31,7 @@ required-dependencies:
 
 ignore:
   - libs/LibStub/tests
+  - libs/BM-utils/tests
   - tests
 
 enable-nolib-creation: yes
