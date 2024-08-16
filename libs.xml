@@ -1,6 +1,7 @@
 <Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/..\FrameXML\UI.xsd">
     <Script file="libs\LibStub\LibStub.lua"/>
+    <Include file="libs\Ace3\AceAddon-3.0\AceAddon-3.0.xml"/>
     <Script file="libs\LibPeriodicTable\LibPeriodicTable-3.1.lua"/>
     <Script file="libs\LibPeriodicTable-Tradeskill\LibPeriodicTable-3.1-Tradeskill.lua"/>
     <Include file="libs\BM-utils\lib.xml"/>
