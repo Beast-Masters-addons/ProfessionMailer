@@ -1,7 +1,4 @@
-## Interface: 100005
-## Interface-Classic: 11403
-## Interface-BCC: 20504
-## Interface-Wrath: 30401
+## Interface: 110002, 40400, 30300, 11503
 
 ## Version: @project-version@
 ## Author: datagutten
