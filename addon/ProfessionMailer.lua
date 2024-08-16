@@ -10,8 +10,8 @@ local lib_inventory = _G.LibStub("AceAddon-3.0"):GetAddon('LibInventoryAce')
 local inventory = lib_inventory:GetModule('LibInventoryLocations')
 ---@type LibInventoryContainer
 local container = lib_inventory:GetModule('LibInventoryContainer')
----@type LibInventoryCharacter
-local character_utils = lib_inventory:GetModule('LibInventoryCharacter')
+--@type LibInventoryCharacter
+--local character_utils = lib_inventory:GetModule('LibInventoryCharacter')
 
 ---@type LibInventoryLocations
 addon.inventory = inventory
