@@ -166,8 +166,12 @@ function addon:characterNeeds(character)
         for _, recipe in pairs(professionInfo['recipes']) do
             craftedItemId = recipe['craftItemId']
             reagents = _G['RecipeReagents'][craftedItemId]
+            if not reagents then
+                reagents = {}
+            end
+
             for _, reagent in ipairs(reagents) do
-                locations = inventory.main:getItemLocation(reagent['reagentItemID'], addon.character, addon.realm)
+                locations = inventory:getItemLocation(reagent['reagentItemID'], addon.character, addon.realm)
                 item = Item:CreateFromItemID(reagent['reagentItemID'])
 
                 local difficulty = utils:DifficultyToNum(recipe["difficulty"])
