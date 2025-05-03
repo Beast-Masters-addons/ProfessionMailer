@@ -23,7 +23,6 @@ local utils = _G.LibStub('BM-utils-1')
 local table_utils = _G.LibStub('BM-utils-2'):GetModule("BMUtilsTable")
 local PT = addon.PT
 
-local NeedFrame = _G.NeedFrame --Frame defined in XML
 ---Blizzard Item object (defined in Interface/FrameXML/ObjectAPI/Item.lua)
 local Item = _G.Item
 
@@ -207,19 +206,6 @@ function addon:need_string_links(character)
         table.insert(need_string_lines, text)
     end
     return table.concat(need_string_lines, "\n")
-end
-
-function addon:close_need_frame()
-    NeedFrame:Hide()
-end
-
-function addon:show_need_frame(character)
-    local close = _G.CreateFrame("Button", "NeedCloseButton", NeedFrame, "UIPanelCloseButton")
-    close:SetPoint("TOPRIGHT", -1, -1)
-    close:SetScript("OnClick", addon.close_need_frame)
-    NeedFrame:Show()
-    _G.NeedText:SetText(addon:need_string_links(character))
-    _G.HeaderText:SetText(string.format("Items needed by %s", character))
 end
 
 frame:SetScript("OnEvent", frame.OnEvent);

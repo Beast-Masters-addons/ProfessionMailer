@@ -23,5 +23,4 @@ libs.xml
 addon\common.lua
 addon\ProfessionData.lua
 addon\ProfessionMailer.lua
-addon\ProfessionMailer.xml
 addon\main.lua

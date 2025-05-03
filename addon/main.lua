@@ -13,7 +13,6 @@ _G.SlashCmdList["NEEDED"] = function(msg)
         return
     end
     utils:cprint(links)
-    addon:show_need_frame(character)
 end
 
 _G.SLASH_NEEDMAIL1 = "/needmail"
