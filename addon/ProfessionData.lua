@@ -2,19 +2,6 @@
 _G['ProfessionData'] = {}
 local lib =_G['ProfessionData']
 --local common = _G['ProfessionMailerCommon-@project-version@']
---local utils = common.utils
-
---- Initialize a table as a global variable
---- @param name string Global variable name
---- @param character string Character key
-function lib:init_table(name, character)
-	if not _G[name] then
-		_G[name] = {}
-	end
-	if character and not _G[name][character] then
-		_G[name][character] = {}
-	end
-end
 
 --- Get recipes an item can be used for
 --- @param itemID number Item ID

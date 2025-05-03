@@ -19,6 +19,8 @@ addon.inventory = inventory
 local mail = lib_inventory:GetModule('LibInventoryMail')
 ---@type BMUtils
 local utils = _G.LibStub('BM-utils-1')
+---@type BMUtilsTable
+local table_utils = _G.LibStub('BM-utils-2'):GetModule("BMUtilsTable")
 local PT = addon.PT
 
 local NeedFrame = _G.NeedFrame --Frame defined in XML
@@ -32,10 +34,10 @@ local character_id = utils:GetCharacterString()
 local _, realm = utils:GetCharacterInfo()
 
 function addon:init_variables()
-    self.data:init_table('ItemRecipes')
-    self.data:init_table('RecipeReagents')
-    self.data:init_table('CharacterDifficulty', character_id)
-    self.data:init_table('CharacterProfessions', character_id)
+    _G['ItemRecipes'] = {}
+    _G['RecipeReagents'] = {}
+    table_utils.subTableCheck(_G['CharacterDifficulty'], character_id)
+    table_utils.subTableCheck(_G['CharacterProfessions'], character_id)
 end
 
 --/dump ProfessionMailer:SaveReagents()
