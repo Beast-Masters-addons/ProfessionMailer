@@ -2,7 +2,8 @@
 local _, addon = ...
 
 addon.data = _G['ProfessionData']
-local professions = addon.professions
+---@type LibProfessionsCommon
+local professions = _G.LibStub("LibProfessions-0")
 
 ---@type LibInventoryAce
 local lib_inventory = _G.LibStub("AceAddon-3.0"):GetAddon('LibInventoryAce')
@@ -50,7 +51,7 @@ function addon:SaveReagents()
     utils:cprint("Saving reagents for " .. professionName)
     --@end-debug@
 
-    local recipes = professions.current:GetRecipes()
+    local recipes = professions.currentProfession:GetRecipes()
     if not recipes or recipes == {} then
         utils:error('No recipes found, close and reopen the profession window')
         return
@@ -64,7 +65,7 @@ function addon:SaveReagents()
         craftItemId = utils:ItemIdFromLink(recipe['link'])
         recipes[recipeID]['craftItemId'] = craftItemId
         --ItemRecipes
-        local reagents = professions.current:GetReagents(recipeID)
+        local reagents = professions.currentProfession:GetReagents(recipeID)
         _G['RecipeReagents'][craftItemId] = reagents
 
         for _, reagent in pairs(reagents) do
@@ -102,10 +103,9 @@ function frame:OnEvent(event, arg1)
         --@debug@
         utils:cprint("ProfessionMailer loaded with debug output", 0, 255, 0)
         --@end-debug@
-        frame:RegisterEvent("TRADE_SKILL_SHOW")
         addon:init_variables()
-    elseif event == "TRADE_SKILL_SHOW" then
-        if utils:IsWoWClassic() then
+
+        if addon.wow_major < 7 then
             frame:RegisterEvent("TRADE_SKILL_UPDATE")
         else
             frame:RegisterEvent("TRADE_SKILL_LIST_UPDATE")
