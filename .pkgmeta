@@ -14,7 +14,7 @@ externals:
     tag: v1.7
   libs/BM-utils-2:
     url: https://github.com/Beast-Masters-addons/BM-utils.git
-    tag: v2.0-alpha2
+    branch: ace_addon
   libs/LibPeriodicTable:
     url: https://repos.curseforge.com/wow/libperiodictable-3-1/trunk/LibPeriodicTable-3.1
   libs/LibPeriodicTable-Tradeskill:
