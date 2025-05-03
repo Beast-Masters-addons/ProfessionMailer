@@ -42,7 +42,7 @@ jobs:
         run: luacheck addon --no-self
 
       - name: Build the addon
-        uses: BigWigsMods/packager@v2.3.1
+        uses: BigWigsMods/packager@v2.4.2
         with:
           args: -g ${{ matrix.game_version }} -z -d
 
@@ -59,7 +59,7 @@ jobs:
           ref: AceAddon
 
       - name: Build LibInventory
-        uses: BigWigsMods/packager@v2.3.1
+        uses: BigWigsMods/packager@v2.4.2
         with:
           args: -z -d -t tests/LibInventory
 
@@ -99,9 +99,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: WoW Packager
-        uses: BigWigsMods/packager@v2.3.1
+        uses: BigWigsMods/packager@v2.4.2
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ProfessionMailer
           path: .release
