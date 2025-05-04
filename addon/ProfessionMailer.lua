@@ -234,6 +234,9 @@ function addon:needTooltip(itemID)
         else
             character = need['character']
         end
+        if not need["name"] then
+            need["name"] = ("Unknown item %d"):format(need["craftedItemId"])
+        end
 
         _G.GameTooltip:AddLine(string.format('%s: %s', character, need["name"]), color['r'], color['g'], color['b'])
     end
