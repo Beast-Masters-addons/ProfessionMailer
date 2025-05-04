@@ -7,8 +7,8 @@ externals:
   libs/Ace3:
     url: https://repos.wowace.com/wow/ace3/trunk
   libs/LibProfessions:
-    url: https://github.com/datagutten/wow-LibProfessions.git
-    tag: v0.13
+    url: https://github.com/Beast-Masters-addons/LibProfessions.git
+    tag: v0.15
   libs/BM-utils:
     url: https://github.com/Beast-Masters-addons/BM-utils.git
     tag: v1.7
