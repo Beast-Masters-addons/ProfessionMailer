@@ -20,13 +20,16 @@ addon.inventory = inventory
 local mail = lib_inventory:GetModule('LibInventoryMail')
 ---@type BMUtils
 local utils = _G.LibStub('BM-utils-1')
+---@type BMUtils
+local utils2 = _G.LibStub('BM-utils-2')
 ---@type BMUtilsTable
-local table_utils = _G.LibStub('BM-utils-2'):GetModule("BMUtilsTable")
+local table_utils = _G.LibStub('BMUtilsTable')
 local PT = addon.PT
 
 ---Blizzard Item object (defined in Interface/FrameXML/ObjectAPI/Item.lua)
 local Item = _G.Item
 
+--TODO: Use AceEvent
 local frame = _G.CreateFrame("FRAME"); -- Need a frame to respond to events
 frame:RegisterEvent("ADDON_LOADED"); -- Fired when saved variables are loaded
 
@@ -57,34 +60,33 @@ function addon:SaveReagents()
         return
     end
     for recipeID, recipe in pairs(recipes) do
-        if recipe['link'] == nil then
-            utils:error(utils:sprintf('No link for recipe %s', recipeID))
-            return
-        end
-        --print('recipeID:', recipeID)
         craftItemId = utils:ItemIdFromLink(recipe['link'])
-        recipes[recipeID]['craftItemId'] = craftItemId
-        --ItemRecipes
-        local reagents = professions.currentProfession:GetReagents(recipeID)
-        _G['RecipeReagents'][craftItemId] = reagents
+        --Recipes like Northrend Alchemy research does not have an item
+        if craftItemId then
+            recipes[recipeID]['craftItemId'] = craftItemId
+            --ItemRecipes
+            local reagents = professions.currentProfession:GetReagents(recipeID)
 
-        for _, reagent in pairs(reagents) do
-            local reagentItemID = reagent["reagentItemID"]
-            local reagentName = reagent["reagentName"]
-            if not reagentItemID or not reagentName then
-                --No need to retry in BfA, if it does not work on first attempt, it will never work
-                if utils:IsWoWClassic() then
-                    utils:error("Close and re-open profession to get all information")
+            _G['RecipeReagents'][craftItemId] = reagents
+
+            for _, reagent in pairs(reagents) do
+                local reagentItemID = reagent["reagentItemID"]
+                local reagentName = reagent["reagentName"]
+                if not reagentItemID or not reagentName then
+                    --No need to retry in BfA, if it does not work on first attempt, it will never work
+                    if utils:IsWoWClassic() then
+                        utils:error("Close and re-open profession to get all information")
+                    end
+                else
+                    if not _G['ItemRecipes'][reagentItemID] then
+                        _G['ItemRecipes'][reagentItemID] = {}
+                    end
+                    if not _G['ItemRecipes'][reagentItemID][craftItemId] then
+                        _G['ItemRecipes'][reagentItemID][craftItemId] = { name = recipe['name'],
+                                                                          itemID = craftItemId }
+                    end
+                    _G['CharacterDifficulty'][character_id][craftItemId] = recipe['difficulty']
                 end
-            else
-                if not _G['ItemRecipes'][reagentItemID] then
-                    _G['ItemRecipes'][reagentItemID] = {}
-                end
-                if not _G['ItemRecipes'][reagentItemID][craftItemId] then
-                    _G['ItemRecipes'][reagentItemID][craftItemId] = {name = recipe['name'],
-                                                                     itemID = craftItemId}
-                end
-                _G['CharacterDifficulty'][character_id][craftItemId] = recipe['difficulty']
             end
         end
     end
@@ -94,7 +96,6 @@ function addon:SaveReagents()
                  max = maxRank
         },
     }
-    utils:cprint("Successfully saved reagents")
 end
 
 -- Event handler
