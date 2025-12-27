@@ -20,8 +20,6 @@ addon.inventory = inventory
 local mail = lib_inventory:GetModule('LibInventoryMail')
 ---@type BMUtils
 local utils = _G.LibStub('BM-utils-1')
----@type BMUtils
-local utils2 = _G.LibStub('BM-utils-2')
 ---@type BMUtilsCharacterInfo
 local character_utils = _G.LibStub('BMUtilsCharacterInfo')
 ---@type BMUtilsTable
