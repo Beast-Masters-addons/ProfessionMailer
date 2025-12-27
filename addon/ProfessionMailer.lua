@@ -22,6 +22,8 @@ local mail = lib_inventory:GetModule('LibInventoryMail')
 local utils = _G.LibStub('BM-utils-1')
 ---@type BMUtils
 local utils2 = _G.LibStub('BM-utils-2')
+---@type BMUtilsCharacterInfo
+local character_utils = _G.LibStub('BMUtilsCharacterInfo')
 ---@type BMUtilsTable
 local table_utils = _G.LibStub('BMUtilsTable')
 local PT = addon.PT
@@ -33,8 +35,8 @@ local Item = _G.Item
 local frame = _G.CreateFrame("FRAME"); -- Need a frame to respond to events
 frame:RegisterEvent("ADDON_LOADED"); -- Fired when saved variables are loaded
 
-local character_id = utils:GetCharacterString()
-local _, realm = utils:GetCharacterInfo()
+local character_id = character_utils.GetCharacterString()
+local currentCharacter, realm = character_utils.getCharacterInfo()
 
 function addon:init_variables()
     _G['ItemRecipes'] = {}
@@ -172,7 +174,7 @@ function addon:characterNeeds(character)
             end
 
             for _, reagent in ipairs(reagents) do
-                locations = inventory:getItemLocation(reagent['reagentItemID'], addon.character, addon.realm)
+                locations = inventory:getItemLocation(reagent['reagentItemID'], currentCharacter, realm)
                 item = Item:CreateFromItemID(reagent['reagentItemID'])
 
                 local difficulty = utils:DifficultyToNum(recipe["difficulty"])
